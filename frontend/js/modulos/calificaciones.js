@@ -56,6 +56,16 @@ function vistaCalificacionesDocente() {
 
   $("#btn-guardar-notas").addEventListener("click", () => {
     const periodoId = Number($("#sel-periodo-calif").value);
+    const pendientes = [];
+    $$("#contenedor-tabla-notas input[type=number]").forEach((input) => {
+      if (input.value === "") return;
+      const valor = Number(input.value);
+      if (!Number.isFinite(valor) || valor < 0 || valor > 10) pendientes.push(valor);
+    });
+    if (pendientes.length) {
+      notificar("Hay notas fuera del rango permitido (0 a 10).", "warning");
+      return;
+    }
     $$("#contenedor-tabla-notas input[type=number]").forEach((input) => {
       const registro = DB.calificaciones.find((c) =>
         c.estudianteId === Number(input.dataset.estudiante)

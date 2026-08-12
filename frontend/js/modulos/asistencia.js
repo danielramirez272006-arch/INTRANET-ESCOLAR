@@ -45,7 +45,7 @@ function vistaAsistenciaDocente() {
     <p class="text-muted">Registro diario de asistencia · ${esc(nombreCursoPorId(usuario.cursoId))}</p>
     <div class="tarjeta p-3 mb-3 d-flex flex-wrap gap-2 align-items-center">
       <label class="fw-medium me-2">Fecha</label>
-      <input type="date" class="form-control w-auto" id="fecha-asistencia" value="${hoy}">
+      <input type="date" class="form-control w-auto" id="fecha-asistencia" value="${hoy}" max="${hoy}">
       <div class="ms-auto d-flex flex-wrap gap-2 align-items-center" id="resumen-asistencia"></div>
     </div>
     <div class="tarjeta p-3 table-responsive" id="tabla-asistencia"></div>`;
@@ -88,7 +88,7 @@ function vistaAsistenciaGeneral() {
       <label class="fw-medium me-2">Curso</label>
       <select class="form-select w-auto" id="sel-curso-asis">${DB.cursos.map((c) => `<option value="${c.id}">${c.nombre}</option>`).join("")}</select>
       <label class="fw-medium me-2 ms-3">Fecha</label>
-      <input type="date" class="form-control w-auto" id="fecha-asis" value="${hoy}">
+      <input type="date" class="form-control w-auto" id="fecha-asis" value="${hoy}" max="${hoy}">
     </div>
     <div class="tarjeta p-3 table-responsive" id="tabla-asis"></div>`;
 

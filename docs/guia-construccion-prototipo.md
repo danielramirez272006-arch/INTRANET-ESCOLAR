@@ -5,7 +5,7 @@
 
 ## 1. Contexto y alcance
 
-Se necesitaba una **página funcional** para validar la interfaz y los flujos de los cinco roles (administración, docente, personal administrativo, estudiante y familia) **sin backend**. Se eligió HTML5 + CSS3 + JavaScript + Bootstrap 5 (por CDN) porque permite iterar rápido y abrir la página sin toolchain.
+Se necesitaba una **página funcional** para validar la interfaz y los flujos de los tres roles (docente, estudiante y familia) **sin backend**. Se eligió HTML5 + CSS3 + JavaScript + Bootstrap 5 (por CDN) porque permite iterar rápido y abrir la página sin toolchain.
 
 > Es una **desviación temporal** del stack objetivo (React + Node.js + PostgreSQL). Está registrada como ADR en `docs/arquitectura.md` y en `CLAUDE.md`.
 
@@ -28,9 +28,10 @@ frontend/
 ├── css/styles.css        # Estilos propios sobre Bootstrap
 └── js/
     ├── util.js           # Helpers compartidos: $, $$, esc (escape de HTML)
-    ├── datos.js          # Datos mock ficticios y generadores deterministas
+    ├── crypto.js         # SHA-256 síncrono y helpers de contraseñas (hash + sal)
+    ├── datos.js          # Datos mock ficticios, persistencia (cargar/guardar/migrar) y generadores
     ├── auth.js           # Sesión simulada y catálogo de roles
-    ├── app.js            # Carga de datos, menú por rol, enrutado de vistas
+    ├── app.js            # Menú por rol y enrutado de vistas
     ├── login.js          # Lógica del formulario de acceso
     └── modulos/          # Un archivo por módulo (renderizado y eventos)
 ```
@@ -40,7 +41,7 @@ frontend/
 ### 4.1 Estilos y páginas base
 
 1. Se creó `css/styles.css` (variables, sidebar fija, tarjetas, avatar) sobre Bootstrap 5.
-2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración, acceso rápido por rol y formulario.
+2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración y formulario.
 3. `dashboard.html`: navbar superior, sidebar para escritorio, offcanvas para móvil y un contenedor `#vista-<modulo>` por módulo.
 
 ### 4.2 Datos de prueba (js/datos.js)
@@ -52,12 +53,13 @@ frontend/
 ### 4.3 Sesión y roles (js/auth.js)
 
 - `iniciarSesion`/`cerrarSesion` guardan/limpian la sesión en `localStorage`.
-- `usuarioActual()` resuelve el usuario activo desde los datos cargados.
+- `usuarioActual()` resuelve el usuario activo desde los datos cargados y rechaza cuentas desactivadas.
 - `ROLES` define etiqueta e icono de cada perfil.
+- Las contraseñas se guardan como hash SHA-256 con sal (`js/crypto.js`); el formulario de acceso verifica el hash y no muestra las contraseñas en claro.
 
 ### 4.4 Aplicación (js/app.js)
 
-- `cargarDatos()` lee el estado de `localStorage` si coincide con `VERSION_DATOS`; si no, clona `DATOS_INICIALES`.
+- `cargarDatos()`/`guardarDatos()` viven en `js/datos.js` y se comparten con la página de acceso; leen el estado de `localStorage` y migran versiones previas.
 - `MENU` define las vistas permitidas por rol; `mostrarVista()` oculta el resto y redirige al inicio si la vista no corresponde al rol (control de acceso en la interfaz).
 - `registrarVista()` conecta cada módulo con su contenedor.
 
@@ -66,10 +68,9 @@ frontend/
 Cada módulo renderiza su vista y ata eventos:
 
 - `inicio.js` — resumen de tarjetas por rol, últimos comunicados y próximos eventos.
-- `usuarios.js` — alta, activar/desactivar y restablecer contraseña (simulado).
 - `calificaciones.js` — el docente edita notas por periodo; los demás consultan (matriz por curso o por estudiante).
 - `asistencia.js` — el docente registra Presente/Ausente/Justificado/Tardanza; el resto consulta con resumen.
-- `comunicados.js` — publicar (admin/docente/staff) y retirar (admin).
+- `comunicados.js` — publicar, editar y retirar los comunicados propios del docente.
 - `reservas.js` — reserva de recursos con detección de conflictos de horario.
 - `consultas.js` — calendario (filtro por tipo), materiales/tareas (descarga y entrega simulada) y horarios por curso.
 
@@ -91,6 +92,6 @@ python -m http.server 8080
 ## 6. Limitaciones conocidas
 
 - La autenticación y autorización están **simuladas en el frontend**: no son seguras y no deben usarse en producción.
-- Cualquier contraseña inicia sesión; no hay validación real de credenciales.
+- Las contraseñas se hashean en el cliente (SHA-256 con sal) como mejora de la demo, pero el hash se puede extraer del `localStorage`; la seguridad real requiere el backend.
 - Bootstrap se consume por CDN (requiere conexión).
 - Los cambios se guardan solo en el navegador (`localStorage`).

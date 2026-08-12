@@ -5,7 +5,7 @@ function tarjetaComunicado(comunicado) {
     <div class="tarjeta p-3 h-100">
       <div class="d-flex justify-content-between align-items-start gap-2">
         <span class="badge text-bg-primary">${esc(comunicado.categoria)}</span>
-        ${usuarioActual().rol === "admin" ? `<button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${comunicado.id}" title="Retirar"><i class="bi bi-trash"></i></button>` : ""}
+        ${usuarioActual().rol === "docente" && usuarioActual().nombre === comunicado.autor ? `<div class="btn-group"><button class="btn btn-sm btn-outline-secondary btn-editar" data-id="${comunicado.id}" title="Editar"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${comunicado.id}" title="Retirar"><i class="bi bi-trash"></i></button></div>` : ""}
       </div>
       <h6 class="mt-2 mb-1">${esc(comunicado.titulo)}</h6>
       <p class="text-muted small mb-2">${esc(comunicado.cuerpo)}</p>
@@ -16,7 +16,7 @@ function tarjetaComunicado(comunicado) {
 
 function renderComunicados() {
   const usuario = usuarioActual();
-  const puedePublicar = ["admin", "docente", "staff"].includes(usuario.rol);
+  const puedePublicar = usuario.rol === "docente";
   const lista = DB.comunicados.slice().sort((a, b) => b.fecha.localeCompare(a.fecha));
   const contenedor = $("#vista-comunicados");
 
@@ -47,6 +47,24 @@ function renderComunicados() {
     guardarDatos();
     renderComunicados();
     notificar("Comunicado retirado.");
+  }));
+
+  $$("#lista-comunicados .btn-editar").forEach((btn) => btn.addEventListener("click", () => {
+    const comunicado = DB.comunicados.find((c) => c.id === Number(btn.dataset.id));
+    if (!comunicado) return;
+    const titulo = prompt("Título del comunicado:", comunicado.titulo);
+    if (titulo === null) return;
+    const cuerpo = prompt("Mensaje:", comunicado.cuerpo);
+    if (cuerpo === null) return;
+    if (!titulo.trim() || !cuerpo.trim()) {
+      notificar("El título y el mensaje son obligatorios.", "warning");
+      return;
+    }
+    comunicado.titulo = titulo.trim();
+    comunicado.cuerpo = cuerpo.trim();
+    guardarDatos();
+    renderComunicados();
+    notificar("Comunicado actualizado.");
   }));
 
   const formulario = $("#form-comunicado");

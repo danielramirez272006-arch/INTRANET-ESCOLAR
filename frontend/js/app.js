@@ -1,31 +1,10 @@
-const CLAVE_DATOS = "intranet_datos";
-const VISTAS = ["inicio", "usuarios", "calificaciones", "asistencia", "comunicados", "reservas", "calendario", "materiales", "horarios"];
+const VISTAS = ["inicio", "calificaciones", "asistencia", "comunicados", "reservas", "calendario", "materiales", "horarios"];
 
 const MENU = {
-  admin: [
-    { vista: "inicio", etiqueta: "Inicio", icono: "speedometer2" },
-    { vista: "usuarios", etiqueta: "Usuarios", icono: "people" },
-    { vista: "calificaciones", etiqueta: "Calificaciones", icono: "clipboard-data" },
-    { vista: "asistencia", etiqueta: "Asistencia", icono: "calendar2-check" },
-    { vista: "comunicados", etiqueta: "Comunicados", icono: "megaphone" },
-    { vista: "reservas", etiqueta: "Reservas", icono: "door-open" },
-    { vista: "calendario", etiqueta: "Calendario", icono: "calendar-event" },
-    { vista: "materiales", etiqueta: "Materiales y Tareas", icono: "folder2-open" },
-    { vista: "horarios", etiqueta: "Horarios", icono: "table" }
-  ],
   docente: [
     { vista: "inicio", etiqueta: "Inicio", icono: "speedometer2" },
     { vista: "calificaciones", etiqueta: "Calificaciones", icono: "clipboard-data" },
     { vista: "asistencia", etiqueta: "Asistencia", icono: "calendar2-check" },
-    { vista: "comunicados", etiqueta: "Comunicados", icono: "megaphone" },
-    { vista: "reservas", etiqueta: "Reservas", icono: "door-open" },
-    { vista: "calendario", etiqueta: "Calendario", icono: "calendar-event" },
-    { vista: "materiales", etiqueta: "Materiales y Tareas", icono: "folder2-open" },
-    { vista: "horarios", etiqueta: "Horarios", icono: "table" }
-  ],
-  staff: [
-    { vista: "inicio", etiqueta: "Inicio", icono: "speedometer2" },
-    { vista: "calificaciones", etiqueta: "Calificaciones", icono: "clipboard-data" },
     { vista: "comunicados", etiqueta: "Comunicados", icono: "megaphone" },
     { vista: "reservas", etiqueta: "Reservas", icono: "door-open" },
     { vista: "calendario", etiqueta: "Calendario", icono: "calendar-event" },
@@ -52,7 +31,6 @@ const MENU = {
   ]
 };
 
-let DB = null;
 let vistaActual = "inicio";
 window.RENDERERS = window.RENDERERS || {};
 
@@ -60,36 +38,12 @@ function registrarVista(vista, fn) {
   window.RENDERERS[vista] = fn;
 }
 
-function nextId(lista) {
-  return Math.max(0, ...lista.map((x) => x.id)) + 1;
-}
-
-function cargarDatos() {
-  try {
-    const guardado = JSON.parse(localStorage.getItem(CLAVE_DATOS));
-    if (guardado && guardado.version === VERSION_DATOS) {
-      DB = guardado.datos;
-      return;
-    }
-  } catch (error) {
-    // sin datos válidos, se usan los iniciales
-  }
-  DB = JSON.parse(JSON.stringify(DATOS_INICIALES));
-}
-
-function guardarDatos() {
-  localStorage.setItem(CLAVE_DATOS, JSON.stringify({ version: VERSION_DATOS, datos: DB }));
-}
-
-function resetearDatos() {
-  localStorage.removeItem(CLAVE_DATOS);
-  location.reload();
-}
-
 function notificar(mensaje, tipo = "success") {
   const colores = { success: "#198754", danger: "#dc3545", warning: "#ffc107", info: "#0dcaf0" };
   const div = document.createElement("div");
   div.textContent = mensaje;
+  div.setAttribute("role", "status");
+  div.setAttribute("aria-live", "polite");
   Object.assign(div.style, {
     position: "fixed",
     top: "70px",
@@ -107,13 +61,16 @@ function notificar(mensaje, tipo = "success") {
 }
 
 function formatearFecha(iso) {
-  if (!iso) return "";
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "";
   const [anio, mes, dia] = iso.split("-");
   return `${dia}/${mes}/${anio}`;
 }
 
-function cardVacio(mensaje) {
-  return `<div class="alert alert-light border text-center my-3">${esc(mensaje)}</div>`;
+function cardVacio(mensaje, icono = "inbox") {
+  return `<div class="alert alert-light border text-center my-3 py-4" role="status">
+    <i class="bi bi-${icono} d-block mb-2 fs-3 text-muted opacity-50"></i>
+    ${esc(mensaje)}
+  </div>`;
 }
 
 function nombreCursoPorId(cursoId) {
@@ -132,7 +89,9 @@ function mostrarVista(vista) {
   vistaActual = vista;
   VISTAS.forEach((v) => $("#vista-" + v).classList.toggle("d-none", v !== vista));
   document.querySelectorAll("#sidebar-lista .nav-link, #menu-movil-lista .nav-link").forEach((enlace) => {
-    enlace.classList.toggle("activo", enlace.dataset.vista === vista);
+    const activo = enlace.dataset.vista === vista;
+    enlace.classList.toggle("activo", activo);
+    enlace.toggleAttribute("aria-current", activo);
   });
   const render = window.RENDERERS[vista];
   if (render) render();

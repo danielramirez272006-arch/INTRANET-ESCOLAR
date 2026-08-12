@@ -94,6 +94,13 @@ function renderMateriales() {
   contenedor.innerHTML = `
     <h4 class="titulo-seccion mb-1">Materiales y tareas</h4>
     <p class="text-muted">Recursos educativos y tareas por asignatura.</p>
+    ${usuario.rol === "docente" ? `<div class="tarjeta p-3 mb-3"><h6 class="fw-semibold mb-3">Publicar material</h6>
+      <form id="form-material" class="row g-2 align-items-end">
+        <div class="col-md-5"><label class="form-label">Título</label><input required class="form-control" id="mat-titulo"></div>
+        <div class="col-md-3"><label class="form-label">Tipo</label><select class="form-select" id="mat-tipo"><option>PDF</option><option>Enlace</option><option>Tarea</option></select></div>
+        <div class="col-md-4"><label class="form-label">Fecha de entrega (solo tareas)</label><input class="form-control" type="date" id="mat-entrega"></div>
+        <div class="col-12 text-end"><button class="btn btn-primary"><i class="bi bi-plus-circle"></i> Publicar</button></div>
+      </form></div>` : ""}
     <div class="tarjeta p-3 mb-3 d-flex flex-wrap gap-2 align-items-center">
       <label class="fw-medium me-2">Materia</label>
       <select class="form-select w-auto" id="sel-materia-materiales">
@@ -124,6 +131,30 @@ function renderMateriales() {
   };
   dibujar();
   $("#sel-materia-materiales").addEventListener("change", dibujar);
+
+  const formulario = $("#form-material");
+  if (formulario) {
+    formulario.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const tipo = $("#mat-tipo").value;
+      const fechaEntrega = $("#mat-entrega").value;
+      if (tipo === "Tarea" && !fechaEntrega) {
+        notificar("Indicá la fecha de entrega de la tarea.", "warning");
+        return;
+      }
+      DB.materiales.push({
+        id: nextId(DB.materiales),
+        materiaId: usuario.materiaId,
+        titulo: $("#mat-titulo").value.trim(),
+        tipo,
+        fecha: new Date().toISOString().slice(0, 10),
+        ...(tipo === "Tarea" ? { entrega: true, fechaEntrega } : {})
+      });
+      guardarDatos();
+      notificar("Material publicado.");
+      renderMateriales();
+    });
+  }
 }
 
 function tablaHorario(cursoId) {

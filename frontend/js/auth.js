@@ -1,9 +1,7 @@
 const CLAVE_SESION = "intranet_sesion";
 
 const ROLES = {
-  admin: { etiqueta: "Administrador", icono: "person-badge" },
   docente: { etiqueta: "Docente", icono: "mortarboard" },
-  staff: { etiqueta: "Personal Administrativo", icono: "briefcase" },
   estudiante: { etiqueta: "Estudiante", icono: "book" },
   familia: { etiqueta: "Familia", icono: "people" }
 };
@@ -32,7 +30,12 @@ function cerrarSesion() {
 function usuarioActual() {
   const sesion = sesionActual();
   if (!sesion || !DB) return null;
-  return DB.usuarios.find((u) => u.id === sesion.userId) || null;
+  const usuario = DB.usuarios.find((u) => u.id === sesion.userId);
+  if (!usuario || !usuario.activo) {
+    cerrarSesion();
+    return null;
+  }
+  return usuario;
 }
 
 function nombreRol(rol) {

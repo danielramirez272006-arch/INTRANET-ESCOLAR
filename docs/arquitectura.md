@@ -22,7 +22,7 @@ La comunicación entre capas se realizará exclusivamente a través de la API RE
 
 ## 1.1 Prototipo actual (frontend estático sin backend)
 
-Para validar la interfaz y los flujos de los cinco roles se construyó un **prototipo funcional** en `frontend/` con tecnología distinta al stack objetivo:
+Para validar la interfaz y los flujos de docente, estudiante y familia se construyó un **prototipo funcional** en `frontend/` con tecnología distinta al stack objetivo:
 
 - **Tecnología:** HTML5 + CSS3 + JavaScript (vanilla) + Bootstrap 5 (vía CDN).
 - **Datos:** mock ficticios en `frontend/js/datos.js`, con persistencia en `localStorage` (botón "Restablecer datos de demo").
@@ -40,19 +40,21 @@ frontend/
 ├── css/styles.css        # Estilos propios sobre Bootstrap
 └── js/
     ├── util.js           # Helpers ($, $$, escape HTML)
-    ├── datos.js          # Datos mock ficticios y generadores
+    ├── crypto.js         # SHA-256 síncrono y helpers de contraseñas (hash + sal)
+    ├── datos.js          # Datos mock ficticios, persistencia (cargar/guardar/migrar) y generadores
     ├── auth.js           # Sesión simulada (localStorage) y roles
-    ├── app.js            # Menú, enrutado de vistas, carga de datos
+    ├── app.js            # Menú, enrutado de vistas
     ├── login.js          # Lógica de la página de acceso
     └── modulos/          # Renderizadores por módulo
         ├── inicio.js     # Resumen por rol
-        ├── usuarios.js   # Gestión de usuarios
         ├── calificaciones.js
         ├── asistencia.js
         ├── comunicados.js
         ├── reservas.js
         └── consultas.js  # Calendario, materiales y horarios
 ```
+
+> Las contraseñas demo se guardan hasheadas (SHA-256 con sal) en `localStorage`. Sigue siendo una simulación de demostración: la seguridad real requiere el backend (sección 3).
 
 ## 2. Decisiones técnicas
 
@@ -72,7 +74,7 @@ frontend/
 
 ## 3. Modelo de roles y autorización
 
-Cinco roles: `administracion`, `docente`, `personal_administrativo`, `estudiante` y `familia`.
+Tres roles: `docente`, `estudiante` y `familia`.
 
 La autorización se aplicará en el servidor mediante un **middleware de autenticación** (valida el token) y un **middleware de autorización** (valida el rol por ruta y por operación). En el prototipo el rol solo oculta/ muestra opciones en la interfaz, lo cual **no es una medida de seguridad**.
 
@@ -138,15 +140,13 @@ INTRANET-ESCOLAR/
 |--------|------|--------|-------------|
 | POST | `/api/auth/login` | público | Iniciar sesión, devuelve token. |
 | POST | `/api/auth/logout` | autenticado | Cerrar sesión. |
-| GET/POST | `/api/usuarios` | administracion | Listar/crear usuarios. |
-| PUT/DELETE | `/api/usuarios/:id` | administracion | Editar/desactivar usuarios. |
 | GET/POST | `/api/calificaciones` | docente | Consultar/registrar calificaciones. |
 | GET | `/api/calificaciones/:estudianteId` | autorizado | Consultar calificaciones de un estudiante. |
 | GET/POST | `/api/asistencias` | docente | Consultar/registrar asistencia. |
 | GET | `/api/asistencias/:estudianteId` | autorizado | Consultar asistencia de un estudiante. |
 | GET/POST | `/api/comunicados` | autenticado / publicar | Listar / publicar avisos. |
-| PUT/DELETE | `/api/comunicados/:id` | administracion | Editar/retirar avisos. |
-| GET/POST | `/api/recursos/:id/reservas` | docente/staff | Consultar/reservar recursos. |
+| PUT/DELETE | `/api/comunicados/:id` | docente autor | Editar/retirar avisos propios. |
+| GET/POST | `/api/recursos/:id/reservas` | docente | Consultar/reservar recursos. |
 | GET | `/api/calendario` | autenticado | Consultar actividades y exámenes. |
 | GET/POST | `/api/materiales` | autenticado / docente | Consultar/publicar materiales y tareas. |
 
@@ -175,4 +175,4 @@ INTRANET-ESCOLAR/
 | Fecha | Versión | Descripción |
 |-------|---------|-------------|
 | 2026-08-12 | 0.1.0 | Versión inicial: visión, decisiones, roles, modelo de datos, estructura y API propuesta. |
-| 2026-08-12 | 0.2.0 | Se agrega el prototipo frontend funcional (`frontend/`), cinco roles y módulos nuevos; se registra la desviación del stack en ADR. |
+| 2026-08-12 | 0.2.0 | Se agrega el prototipo frontend funcional (`frontend/`), tres roles y módulos nuevos; se registra la desviación del stack en ADR. |

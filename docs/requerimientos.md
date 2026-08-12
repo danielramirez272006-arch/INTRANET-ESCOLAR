@@ -5,7 +5,7 @@
 
 ## 1. Descripción general
 
-La Intranet Escolar es una plataforma web que centraliza la gestión académica, administrativa y comunicativa de una institución educativa. Permite que docentes, personal administrativo, estudiantes y familias accedan a la información relevante de manera segura, rápida y organizada, garantizando que cada rol acceda únicamente a lo que le corresponde.
+La Intranet Escolar es una plataforma web que centraliza la gestión académica y comunicativa de una institución educativa. Permite que docentes, estudiantes y familias accedan a la información relevante de manera segura, rápida y organizada, garantizando que cada rol acceda únicamente a lo que le corresponde.
 
 **Principio rector:** el sistema maneja datos de menores de edad; la protección y privacidad de esos datos prevalece sobre cualquier otra consideración funcional o técnica.
 
@@ -16,16 +16,9 @@ La Intranet Escolar es una plataforma web que centraliza la gestión académica,
 ### RF-01 Autenticación por roles
 - [ ] RF-01.1 El sistema permite iniciar sesión con usuario y contraseña.
 - [ ] RF-01.2 La contraseña se almacena de forma segura (hash con sal) y nunca en texto plano.
-- [ ] RF-01.3 Existen cinco perfiles de acceso: `administracion`, `docente`, `personal_administrativo`, `estudiante` y `familia`.
+- [ ] RF-01.3 Existen tres perfiles de acceso: `docente`, `estudiante` y `familia`.
 - [ ] RF-01.4 El sistema permite cerrar sesión de forma segura (invalida la sesión en el servidor).
 - [ ] RF-01.5 El rol se asigna al crear el usuario y no puede modificarse desde el frontend.
-
-### RF-02 Gestión de usuarios
-- [ ] RF-02.1 Alta de usuarios: el perfil `administracion` puede crear usuarios de cualquier rol.
-- [ ] RF-02.2 Baja de usuarios: el perfil `administracion` puede desactivar/eliminar usuarios.
-- [ ] RF-02.3 Edición de usuarios: el perfil `administracion` puede modificar datos y resetear contraseñas.
-- [ ] RF-02.4 El sistema valida que no existan usuarios duplicados (p. ej. correo o documento único).
-- [ ] RF-02.5 Solo el perfil `administracion` tiene acceso a la gestión de usuarios.
 
 ### RF-03 Módulo académico: calificaciones y asistencia
 - [ ] RF-03.1 El perfil `docente` puede registrar calificaciones de sus estudiantes.
@@ -34,23 +27,22 @@ La Intranet Escolar es una plataforma web que centraliza la gestión académica,
 - [ ] RF-03.4 Las calificaciones y la asistencia quedan asociadas a un curso, una materia y un periodo/trimestre.
 - [ ] RF-03.5 El perfil `estudiante/familia` puede consultar calificaciones y asistencia de sus estudiantes.
 - [ ] RF-03.6 El perfil `estudiante/familia` no puede modificar datos académicos.
-- [ ] RF-03.7 El perfil `administracion` y `personal_administrativo` pueden consultar el módulo académico sin modificarlo.
 - [ ] RF-03.8 El sistema genera reportes de asistencia por curso y alerta ausencias recurrentes.
 
 ### RF-04 Tablón de comunicados y circulares
-- [ ] RF-04.1 Los perfiles `administracion`, `docente` y `personal_administrativo` pueden publicar comunicados.
+- [ ] RF-04.1 El perfil `docente` puede publicar comunicados.
 - [ ] RF-04.2 Los comunicados se clasifican por categoría (General, Académico, Administrativo, Suspensión, Evento).
 - [ ] RF-04.3 Los comunicados muestran título, cuerpo, autor, fecha de publicación y categoría.
 - [ ] RF-04.4 Todos los roles pueden leer los comunicados publicados.
-- [ ] RF-04.5 El perfil `administracion` puede editar y retirar comunicados.
+- [ ] RF-04.5 El perfil `docente` puede editar y retirar sus propios comunicados.
 - [ ] RF-04.6 El sistema mantiene un historial de publicaciones.
 
 ### RF-05 Reserva de aulas y recursos
-- [ ] RF-05.1 Los perfiles `docente` y `personal_administrativo` pueden reservar aulas, laboratorios y equipos.
+- [ ] RF-05.1 El perfil `docente` puede reservar aulas, laboratorios y equipos.
 - [ ] RF-05.2 El sistema muestra el calendario de disponibilidad de cada recurso.
 - [ ] RF-05.3 El sistema detecta conflictos de horario y rechaza reservas superpuestas.
 - [ ] RF-05.4 La reserva confirma automáticamente si no hay conflicto.
-- [ ] RF-05.5 El perfil `administracion` puede gestionar y cancelar reservas.
+- [ ] RF-05.5 El perfil `docente` puede cancelar sus propias reservas.
 
 ### RF-06 Calendario de actividades y exámenes
 - [ ] RF-06.1 Todos los roles consultan el calendario de evaluaciones, actividades y eventos institucionales.
@@ -113,17 +105,16 @@ Un entregable se considera **aceptado** cuando:
 
 ## 6. Prototipo funcional frontend
 
-> Construido el 2026-08-12 para validar la interfaz y los flujos de los cinco roles **sin backend**.
+> Construido el 2026-08-12 para validar la interfaz y los flujos de tres roles **sin backend**.
 
 **Qué incluye:**
 
 - Página de inicio de sesión con cuentas de demostración por rol (`frontend/index.html`).
 - Aplicación de una sola vista con menú lateral según el rol (`frontend/dashboard.html`).
 - Módulos funcionales con datos de prueba ficticios y persistencia local:
-  - Gestión de usuarios (alta, activar/desactivar, restablecer contraseña simulada).
   - Calificaciones: el docente registra/edita notas; los demás roles consultan.
   - Asistencia: el docente registra Presente/Ausente/Justificado/Tardanza; el resto consulta.
-  - Comunicados: publicación por roles autorizados y retiro por administración.
+  - Comunicados: publicación, edición y retiro por parte del docente autor.
   - Reservas de aulas y recursos con detección de conflictos de horario.
   - Calendario de actividades y exámenes con filtro por tipo.
   - Materiales y tareas con descarga simulada y entrega de tareas en línea.
@@ -138,18 +129,15 @@ Un entregable se considera **aceptado** cuando:
 
 ## 7. Roles y matriz de permisos (referencia)
 
-| Operación | administracion | docente | personal_administrativo | estudiante | familia |
-|-----------|:-:|:-:|:-:|:-:|:-:|
-| Gestionar usuarios | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Registrar calificaciones/asistencia | ❌ | ✅ | ❌ | ❌ | ❌ |
-| Consultar datos académicos propios | ✅ (consulta) | ✅ (su curso) | ✅ (consulta) | ✅ (propias) | ✅ (de su estudiante) |
-| Publicar comunicados | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Leer comunicados | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Gestionar comunicados (editar/retirar) | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Reservar aulas y recursos | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Consultar calendario | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Consultar materiales y tareas | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Entregar tareas | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Operación | docente | estudiante | familia |
+|-----------|:-:|:-:|:-:|
+| Registrar calificaciones/asistencia | ✅ | ❌ | ❌ |
+| Consultar datos académicos | ✅ (su curso) | ✅ (propios) | ✅ (de su estudiante) |
+| Publicar y gestionar comunicados propios | ✅ | ❌ | ❌ |
+| Leer comunicados | ✅ | ✅ | ✅ |
+| Reservar y cancelar recursos propios | ✅ | ❌ | ❌ |
+| Consultar calendario y materiales | ✅ | ✅ | ✅ |
+| Entregar tareas | ❌ | ✅ | ❌ |
 
 ## 8. Historial del documento
 

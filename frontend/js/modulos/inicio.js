@@ -17,7 +17,7 @@ function asistenciaPorcentaje(estudianteId) {
 
 function tarjetaResumen(icono, color, valor, etiqueta) {
   return `<div class="col-6 col-xl-3">
-    <div class="tarjeta p-3 d-flex align-items-center gap-3 h-100">
+    <div class="tarjeta tarjeta-resumen p-3 d-flex align-items-center gap-3 h-100">
       <div class="icono-tarjeta text-bg-${color}"><i class="bi bi-${icono}"></i></div>
       <div class="min-w-0"><div class="fs-4 fw-bold">${valor}</div><div class="text-muted small">${etiqueta}</div></div>
     </div>
@@ -27,21 +27,11 @@ function tarjetaResumen(icono, color, valor, etiqueta) {
 function tarjetasInicio(usuario) {
   const hoy = new Date().toISOString().slice(0, 10);
   switch (usuario.rol) {
-    case "admin":
-      return tarjetaResumen("people", "primary", DB.usuarios.filter((u) => u.activo).length, "Usuarios activos")
-        + tarjetaResumen("megaphone", "success", DB.comunicados.length, "Comunicados")
-        + tarjetaResumen("door-open", "info", DB.recursos.length, "Recursos")
-        + tarjetaResumen("calendar-check", "warning", DB.reservas.length, "Reservas");
     case "docente":
       return tarjetaResumen("people", "primary", DB.estudiantes.filter((e) => e.cursoId === usuario.cursoId).length, "Estudiantes en el curso")
         + tarjetaResumen("clipboard-data", "success", DB.materias.length, "Materias")
         + tarjetaResumen("calendar2-check", "info", DB.asistencia.filter((a) => a.fecha === hoy).length, "Registros hoy")
         + tarjetaResumen("megaphone", "warning", DB.comunicados.length, "Comunicados");
-    case "staff":
-      return tarjetaResumen("megaphone", "primary", DB.comunicados.length, "Comunicados")
-        + tarjetaResumen("door-open", "success", DB.reservas.length, "Reservas")
-        + tarjetaResumen("folder2-open", "info", DB.materiales.length, "Materiales")
-        + tarjetaResumen("calendar-event", "warning", DB.calendario.length, "Eventos");
     case "estudiante": {
       const promedio = promedioEstudiante(usuario.estudianteId);
       return tarjetaResumen("clipboard-data", "primary", promedio, "Promedio general")

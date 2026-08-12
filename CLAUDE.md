@@ -5,16 +5,15 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
 ## 1. Contexto
 
 - **Proyecto:** Intranet Escolar para una institución educativa pública.
-- **Propósito:** Centralizar la gestión académica y la comunicación institucional entre administración, docentes y familias en una sola plataforma web.
-- **Beneficiarios:** Equipo directivo/administrativo, personal docente, estudiantes y familias.
+- **Propósito:** Centralizar la gestión académica y la comunicación institucional entre docentes, estudiantes y familias en una sola plataforma web.
+- **Beneficiarios:** Personal docente, estudiantes y familias.
 - **Naturaleza del dato:** El sistema maneja **datos de menores de edad**; todo diseño, desarrollo y operación debe priorizar su protección y privacidad.
 - **Estado actual:** Proyecto en fase de planificación; se construye de forma incremental con control de versiones en Git.
 
 ## 2. Requerimientos
 
 ### Funcionales
-- [ ] **Autenticación por roles:** acceso con cinco perfiles — administración, docente, personal administrativo, estudiante y familia.
-- [ ] **Gestión de usuarios:** alta, baja y edición de usuarios del sistema (solo administración).
+- [ ] **Autenticación por roles:** acceso con tres perfiles — docente, estudiante y familia.
 - [ ] **Módulo académico:** registro de calificaciones y/o asistencia por parte de docentes.
 - [ ] **Tablón de comunicados:** publicación y lectura de avisos del centro.
 - [ ] **Reserva de aulas y recursos:** disponibilidad, reservas y gestión de conflictos de horario.
@@ -61,7 +60,7 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
 
 - **Decisiones tomadas:**
   - Stack propuesto (objetivo): React (frontend), Node.js (backend), PostgreSQL (base de datos).
-  - Modelo de cinco roles: administración, docente, personal administrativo, estudiante y familia.
+  - Modelo de tres roles: docente, estudiante y familia.
   - Prototipo frontend funcional en HTML/CSS/JS + Bootstrap con datos mock y sin backend (2026-08-12). Es una **desviación temporal** del stack objetivo, justificada para validar interfaz; documentada en `docs/arquitectura.md` (ADR).
 - **Progreso del proyecto:**
   - Repositorio Git inicializado (commit inicial).

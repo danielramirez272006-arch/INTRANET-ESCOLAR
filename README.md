@@ -1,8 +1,8 @@
 # Intranet Escolar
 
-Plataforma web para la gestión académica, administrativa y comunicativa de una institución educativa. Centraliza calificaciones, asistencia, comunicados, reservas de aulas, calendario, materiales y tareas, con acceso restringido por rol: **administración**, **docente**, **personal administrativo**, **estudiante** y **familia**.
+Plataforma web para la gestión académica y comunicativa de una institución educativa. Centraliza calificaciones, asistencia, comunicados, reservas de aulas, calendario, materiales y tareas, con acceso restringido para **docentes**, **estudiantes** y **familias**.
 
-> ⚠️ **Estado:** existe un **prototipo funcional frontend** (HTML/CSS/JS + Bootstrap con datos de prueba) para validar la interfaz y los flujos de los cinco roles. El backend (Node.js + PostgreSQL) y el frontend definitivo (React) están pendientes. La autenticación del prototipo es simulada y **no es segura**.
+> ⚠️ **Estado:** existe un **prototipo funcional frontend** (HTML/CSS/JS + Bootstrap con datos de prueba) para validar la interfaz y los flujos de docente, estudiante y familia. El backend (Node.js + PostgreSQL) y el frontend definitivo (React) están pendientes. La autenticación del prototipo es simulada y **no es segura**.
 
 ## Tabla de contenidos
 
@@ -19,13 +19,13 @@ Plataforma web para la gestión académica, administrativa y comunicativa de una
 ## Características
 
 - **Autenticación por roles:** cinco perfiles con permisos diferenciados.
-- **Gestión de usuarios:** alta, activación/desactivación y restablecimiento de contraseñas (solo administración).
 - **Módulo académico:** registro de calificaciones y asistencia por docentes, consulta para estudiantes y familias.
 - **Tablón de comunicados:** publicación por roles autorizados y lectura por toda la comunidad.
 - **Reserva de aulas y recursos:** calendario de disponibilidad y detección de conflictos de horario.
 - **Calendario de actividades y exámenes:** evaluaciones, eventos y actividades con filtro por tipo.
 - **Materiales y tareas:** descarga de recursos y entrega de tareas en línea.
 - **Diseño responsivo:** se adapta a computadoras, tabletas y teléfonos móviles.
+- **Contraseñas protegidas:** se guardan como hash (SHA-256 con sal) en `localStorage`, nunca en texto plano.
 
 ## Stack tecnológico
 
@@ -77,14 +77,12 @@ Luego entra en `http://localhost:8080`.
 ## Uso
 
 1. Abre la página de inicio (`index.html`).
-2. Selecciona una cuenta de demostración (o usa el acceso rápido por rol). Cualquier contraseña funciona en el prototipo.
+2. Selecciona una cuenta de demostración e ingresa la contraseña `demo2026`.
 3. Explora los módulos según el rol:
 
 | Cuenta | Rol | Puede hacer |
 |--------|-----|-------------|
-| María López | Administrador | Gestionar usuarios, retirar comunicados, consultar todo |
 | Carlos Ríos | Docente | Registrar calificaciones y asistencia, publicar comunicados, reservar recursos |
-| Laura Fernández | Personal Administrativo | Publicar comunicados, reservar recursos, consultar calificaciones |
 | Ana Torres | Estudiante | Consultar notas, horario y asistencia; entregar tareas |
 | Raquel Torres | Familia | Seguimiento académico de su estudiante |
 
@@ -96,7 +94,7 @@ intranet-escolar/
 │   ├── index.html
 │   ├── dashboard.html
 │   ├── css/styles.css
-│   └── js/         # util, datos, auth, app, login, modulos/
+│   └── js/         # util, crypto, datos, auth, app, login, modulos/
 ├── docs/           # Documentación del proyecto
 ├── README.md
 ├── CONTRIBUTING.md

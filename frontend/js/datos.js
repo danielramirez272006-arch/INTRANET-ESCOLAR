@@ -1,4 +1,67 @@
-const VERSION_DATOS = 1;
+const VERSION_DATOS = 5;
+const CLAVE_DATOS = "intranet_datos";
+const CORREOS_CUENTAS_DEMO = new Set([
+  "docente@intranet.edu",
+  "pablo.ortega@intranet.edu",
+  "estudiante@intranet.edu",
+  "familia@intranet.edu"
+]);
+
+let DB = null;
+
+function clonar(objeto) {
+  return JSON.parse(JSON.stringify(objeto));
+}
+
+function nextId(lista) {
+  return Math.max(0, ...lista.map((x) => x.id)) + 1;
+}
+
+function cargarDatos() {
+  try {
+    const guardado = JSON.parse(localStorage.getItem(CLAVE_DATOS));
+    if (guardado && guardado.datos) {
+      DB = guardado.datos;
+      if (guardado.version !== VERSION_DATOS) migrarDatos();
+      return;
+    }
+  } catch (error) {
+    // sin datos válidos, se usan los iniciales
+  }
+  DB = clonar(DATOS_INICIALES);
+}
+
+function migrarDatos() {
+  const inicial = DATOS_INICIALES;
+  for (const clave of Object.keys(inicial)) {
+    if (Array.isArray(inicial[clave]) && !Array.isArray(DB[clave])) {
+      DB[clave] = clonar(inicial[clave]);
+    }
+  }
+  if (!DB.entregas || typeof DB.entregas !== "object") DB.entregas = {};
+  DB.usuarios = DB.usuarios.filter((usuario) => ["docente", "estudiante", "familia"].includes(usuario.rol));
+  DB.usuarios.forEach((usuario) => {
+    if (usuario.contrasena && !usuario.contrasenaHash) {
+      usuario.sal = usuario.sal || generarSal();
+      usuario.contrasenaHash = hashContrasena(usuario.contrasena, usuario.sal);
+      delete usuario.contrasena;
+    }
+    if (CORREOS_CUENTAS_DEMO.has(usuario.email)) {
+      usuario.sal = usuario.sal || generarSal();
+      usuario.contrasenaHash = hashContrasena("demo2026", usuario.sal);
+    }
+  });
+  guardarDatos();
+}
+
+function guardarDatos() {
+  localStorage.setItem(CLAVE_DATOS, JSON.stringify({ version: VERSION_DATOS, datos: DB }));
+}
+
+function resetearDatos() {
+  localStorage.removeItem(CLAVE_DATOS);
+  location.reload();
+}
 
 function ultimasFechasEscolares(cantidad) {
   const fechas = [];
@@ -19,13 +82,10 @@ function textoFecha(fecha) {
 
 const base = {
   usuarios: [
-    { id: 1, nombre: "María López", rol: "admin", email: "admin@intranet.edu", activo: true },
-    { id: 2, nombre: "Carlos Ríos", rol: "docente", email: "docente@intranet.edu", activo: true, cursoId: 3, materiaId: 1 },
-    { id: 3, nombre: "Laura Fernández", rol: "staff", email: "staff@intranet.edu", activo: true },
-    { id: 4, nombre: "Ana Torres", rol: "estudiante", email: "estudiante@intranet.edu", activo: true, estudianteId: 1 },
-    { id: 5, nombre: "Raquel Torres", rol: "familia", email: "familia@intranet.edu", activo: true, estudianteId: 1 },
-    { id: 6, nombre: "Pablo Ortega", rol: "docente", email: "pablo.ortega@intranet.edu", activo: true, cursoId: 3, materiaId: 2 },
-    { id: 7, nombre: "Silvia Ramos", rol: "staff", email: "silvia.ramos@intranet.edu", activo: false }
+    { id: 2, nombre: "Carlos Ríos", rol: "docente", email: "docente@intranet.edu", sal: "sal-docente-1-demo", contrasenaHash: "d20ba135a3b84033d226f3798ec3699a5e4d6d630b5e58ec70cf088b715f93dd", activo: true, cursoId: 3, materiaId: 1 },
+    { id: 4, nombre: "Ana Torres", rol: "estudiante", email: "estudiante@intranet.edu", sal: "sal-estudiante-1-demo", contrasenaHash: "652ef775e4f952f42748c04b90d3b96acf23a9a8036ae8fb7a605ebe62d92800", activo: true, estudianteId: 1 },
+    { id: 5, nombre: "Raquel Torres", rol: "familia", email: "familia@intranet.edu", sal: "sal-familia-1-demo", contrasenaHash: "b118d1e7810d187c697488331a804eebccfb97541be731143886d856f2c3d7bb", activo: true, estudianteId: 1 },
+    { id: 6, nombre: "Pablo Ortega", rol: "docente", email: "pablo.ortega@intranet.edu", sal: "sal-docente-2-demo", contrasenaHash: "e85ef9d7fa3e5646bbcc11438480f47c40604c1da54bf18f84ce3d5fe988b7aa", activo: true, cursoId: 3, materiaId: 2 }
   ],
   cursos: [
     { id: 1, nombre: "1° A" },
@@ -75,7 +135,7 @@ const base = {
   ],
   reservas: [
     { id: 1, recursoId: 4, fecha: "2026-08-14", hora: "09:15-10:45", solicitante: "Carlos Ríos", motivo: "Clase práctica de informática" },
-    { id: 2, recursoId: 3, fecha: "2026-08-15", hora: "11:00-12:30", solicitante: "Laura Fernández", motivo: "Taller de ciencias" }
+    { id: 2, recursoId: 3, fecha: "2026-08-15", hora: "11:00-12:30", solicitante: "Pablo Ortega", motivo: "Taller de ciencias" }
   ],
   calendario: [
     { id: 1, titulo: "Evaluación parcial de Matemática", tipo: "Examen", fecha: "2026-08-18", descripcion: "Unidades 1 y 2 del programa.", destino: "2° A" },
