@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión · Intranet Educativa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-fondo">
+  <main class="login-tarjeta">
+    <div class="tarjeta p-4 p-md-5">
+      <div class="text-center mb-4">
+        <div class="avatar-inicial avatar-grande mx-auto"><i class="bi bi-mortarboard"></i></div>
+        <h1 class="h4 mt-3 mb-1">Intranet Educativa</h1>
+        <p class="text-muted mb-0">Portal para docentes, estudiantes y familias</p>
+      </div>
+      <form id="form-login">
+        <div class="mb-3">
+          <label for="demo-usuario" class="form-label">Cuenta de demostración</label>
+          <select id="demo-usuario" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="contrasena" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="contrasena" placeholder="••••••••">
+          <div class="form-text">Prototipo sin backend: cualquier contraseña funciona.</div>
+        </div>
+        <div id="alerta-login" class="alert alert-danger py-2 d-none"></div>
+        <button class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+      </form>
+      <hr class="my-4">
+      <p class="text-muted small text-center mb-2">Acceso rápido por rol</p>
+      <div class="d-flex flex-wrap gap-2 justify-content-center" id="accesos-rapidos"></div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/datos.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
