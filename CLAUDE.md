@@ -66,6 +66,8 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
   - Repositorio Git inicializado (commit inicial).
   - Documentación raíz (README, CLAUDE.md, CONTRIBUTING.md, CHANGELOG.md, docs/).
   - Prototipo frontend en `frontend/` con login por cuenta y contraseña, tres roles (docente, estudiante y familia) y módulos de calificaciones, asistencia, comunicados, reservas, calendario, materiales/tareas y horarios. Datos ficticios con persistencia en `localStorage`.
+  - Rediseño de identidad visual e institucional para **Liceo Escolar San Miguel** (escudo, badges, hero banner, categorías de navegación y paleta académica).
+  - Integración de suite de pruebas unitarias (`tests/crypto.test.js`) con `node --test` y soporte UTF-8 en SHA-256.
 - **Próximos pasos pendientes:**
   - Definir el modelo de datos definitivo y la estructura de la API.
   - Implementar backend Node.js/Express con autorización en servidor y PostgreSQL.

@@ -23,15 +23,18 @@ Se necesitaba una **página funcional** para validar la interfaz y los flujos de
 
 ```
 frontend/
-├── index.html            # Página de inicio de sesión
+├── index.html            # Página de inicio de sesión institucional
 ├── dashboard.html        # Shell de la aplicación (navbar + sidebar + vistas)
-├── css/styles.css        # Estilos propios sobre Bootstrap
+├── css/styles.css        # Estilos visuales de la identidad escolar San Miguel
+├── img/
+│   ├── escudo.png        # Escudo del Liceo Escolar San Miguel
+│   └── banner.png        # Ilustración hero para la bienvenida del portal
 └── js/
-    ├── util.js           # Helpers compartidos: $, $$, esc (escape de HTML)
-    ├── crypto.js         # SHA-256 síncrono y helpers de contraseñas (hash + sal)
+    ├── util.js           # Helpers compartidos: $, $$, esc (escape de HTML) y esEmailValido
+    ├── crypto.js         # SHA-256 síncrono con UTF-8 y helpers de contraseñas (hash + sal)
     ├── datos.js          # Datos mock ficticios, persistencia (cargar/guardar/migrar) y generadores
     ├── auth.js           # Sesión simulada y catálogo de roles
-    ├── app.js            # Menú por rol y enrutado de vistas
+    ├── app.js            # Menú por rol con categorías e insignias visuales
     ├── login.js          # Lógica del formulario de acceso
     └── modulos/          # Un archivo por módulo (renderizado y eventos)
 ```
@@ -77,9 +80,10 @@ Cada módulo renderiza su vista y ata eventos:
 ## 5. Cómo se verificó
 
 1. **Sintaxis JS:** `node --check` sobre cada archivo de `js/`.
-2. **Coherencia:** las vistas declaradas en `dashboard.html` coinciden con los módulos registrados (`registrarVista`).
-3. **Datos:** un script Node cargó `datos.js` y validó conteos (calificaciones = estudiantes × materias × periodos, asistencia sin fines de semana, notas dentro de rango, estados válidos).
-4. **Render real:** servidor estático (`python -m http.server`) + Chrome headless (`--dump-dom`) con una sesión sembrada por rol, comprobando el contenido esperado de cada vista.
+2. **Pruebas unitarias:** `node --test tests/crypto.test.js` ejecutó 10 pruebas unitarias verificando hashing SHA-256 con acentos/UTF-8, sal aleatoria y verificación de contraseñas (10/10 aprobadas).
+3. **Coherencia:** las vistas declaradas en `dashboard.html` coinciden con los módulos registrados (`registrarVista`).
+4. **Datos:** un script Node cargó `datos.js` y validó conteos (calificaciones = estudiantes × materias × periodos, asistencia sin fines de semana, notas dentro de rango, estados válidos).
+5. **Render real:** servidor estático (`python -m http.server`) comprobando el contenido esperado de cada vista.
 
 Para reproducir la prueba de render:
 

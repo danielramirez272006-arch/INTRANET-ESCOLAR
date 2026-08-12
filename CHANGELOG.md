@@ -4,7 +4,21 @@ Todos los cambios relevantes de este proyecto se documentan en este archivo.
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
-## [Sin publicar]
+## [0.4.0] - 2026-08-12
+
+### Visuales & UX
+- Identidad visual e institucional del **Liceo Escolar San Miguel**:
+  - Escudo escolar oficial (`frontend/img/escudo.png`) e insignia del "Ciclo Lectivo 2026".
+  - Hero banner educativo con ilustración (`frontend/img/banner.png`) y bienvenida contextual por rol.
+  - Paleta de colores académica (azul marino, zafiro, verde esmeralda y oro) con tipografía Inter y sombras elevadas.
+  - Menú lateral categorizado por secciones: **Portal**, **Gestión Académica** y **Vida Escolar**.
+  - Tarjetas motivacionales con citas educativas e insignias de rol coloreadas.
+
+### Criptografía & Pruebas
+- Soporte para codificación UTF-8 en `sha256()` para procesar correctamente acentos, caracteres especiales y emojis (`frontend/js/crypto.js`).
+- Suite de pruebas unitarias automatizada (`tests/crypto.test.js`) ejecutable con `node --test` (10/10 pruebas superadas).
+
+## [0.3.0] - 2026-08-12
 
 ### Seguridad
 

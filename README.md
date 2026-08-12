@@ -87,15 +87,25 @@ Luego entra en `http://localhost:8080`.
 | Ana Torres | Estudiante | Consultar notas, horario y asistencia; entregar tareas |
 | Raquel Torres | Familia | Seguimiento académico de su estudiante |
 
+## Pruebas unitarias
+
+Para ejecutar la suite de pruebas automatizadas del módulo de criptografía (hashing SHA-256 UTF-8 y sales):
+
+```bash
+node --test tests/crypto.test.js
+```
+
 ## Estructura del proyecto
 
 ```
 intranet-escolar/
-├── frontend/       # Prototipo funcional (HTML/CSS/JS + Bootstrap)
+├── frontend/       # Prototipo funcional con identidad visual del Liceo San Miguel
 │   ├── index.html
 │   ├── dashboard.html
 │   ├── css/styles.css
+│   ├── img/        # Escudo escolar e ilustración hero
 │   └── js/         # util, crypto, datos, auth, app, login, modulos/
+├── tests/          # Pruebas unitarias (crypto.test.js)
 ├── docs/           # Documentación del proyecto
 ├── README.md
 ├── CONTRIBUTING.md

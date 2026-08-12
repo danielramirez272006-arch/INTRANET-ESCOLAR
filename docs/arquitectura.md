@@ -1,7 +1,7 @@
 # Arquitectura — Intranet Escolar
 
 > Documento de arquitectura del proyecto **Intranet Escolar**.
-> Versión: 0.3.0 · Estado: prototipo frontend funcional + arquitectura objetivo · Última actualización: 2026-08-12
+> Versión: 0.4.0 · Estado: prototipo frontend funcional + identidad visual escolar + arquitectura objetivo · Última actualización: 2026-08-12
 
 ## 1. Visión general
 
@@ -177,3 +177,4 @@ INTRANET-ESCOLAR/
 | 2026-08-12 | 0.1.0 | Versión inicial: visión, decisiones, roles, modelo de datos, estructura y API propuesta. |
 | 2026-08-12 | 0.2.0 | Se agrega el prototipo frontend funcional (`frontend/`), tres roles y módulos nuevos; se registra la desviación del stack en ADR. |
 | 2026-08-12 | 0.3.0 | Se documenta el acceso con contraseña demo, la eliminación de acceso rápido y la limitación a tres roles. |
+| 2026-08-12 | 0.4.0 | Identidad visual de Liceo Escolar San Miguel (escudo, badges, hero banner, categorías), soporte UTF-8 en crypto y suite de pruebas unitarias. |

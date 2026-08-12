@@ -146,3 +146,4 @@ Un entregable se considera **aceptado** cuando:
 | 2026-08-12  | 0.1.0   | Versión inicial de requerimientos funcionales y no funcionales. |
 | 2026-08-12  | 0.2.0   | Nuevos roles (personal_administrativo, estudiante, familia), módulos de reservas, calendario y materiales/tareas; sección de prototipo frontend. |
 | 2026-08-12  | 0.3.0   | El prototipo se limita a docente, estudiante y familia; se documentan sus permisos y el acceso con contraseña demo. |
+| 2026-08-12  | 0.4.0   | Rediseño visual institucional (escudo escolar, badges por rol, hero banner y paleta académica); suite de pruebas unitarias de criptografía. |
