@@ -85,7 +85,7 @@ La Intranet Escolar es una plataforma web que centraliza la gestión académica,
 - [ ] RNF-02.5 Los datos de prueba son ficticios; nunca se usan datos reales de estudiantes en demos.
 
 ### RNF-03 Mantenibilidad y control de versiones
-- [ ] RNF-03.1 Todo el código está versionado en Git con historial limpio y descriptivo.
+- [ ] RNF-03.1 Todo el código se versiona en Git **desde el inicio del proyecto**, con historial limpio y descriptivo.
 - [ ] RNF-03.2 El código sigue convenciones de estilo y nombres autoexplicativos.
 - [ ] RNF-03.3 Toda funcionalidad nueva incluye pruebas y actualización de la documentación.
 
