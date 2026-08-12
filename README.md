@@ -1,13 +1,14 @@
 # Intranet Escolar
 
-Plataforma web para la gestión académica y la comunicación institucional de una institución educativa pública. Centraliza la administración de usuarios, el registro de calificaciones y asistencia, y el tablón de comunicados, con acceso restringido según el rol: **administración**, **docente** y **estudiante/familia**.
+Plataforma web para la gestión académica, administrativa y comunicativa de una institución educativa. Centraliza calificaciones, asistencia, comunicados, reservas de aulas, calendario, materiales y tareas, con acceso restringido por rol: **administración**, **docente**, **personal administrativo**, **estudiante** y **familia**.
 
-> ⚠️ **Estado:** proyecto en fase de planificación. La documentación está completa; el código de la aplicación está por construir.
+> ⚠️ **Estado:** existe un **prototipo funcional frontend** (HTML/CSS/JS + Bootstrap con datos de prueba) para validar la interfaz y los flujos de los cinco roles. El backend (Node.js + PostgreSQL) y el frontend definitivo (React) están pendientes. La autenticación del prototipo es simulada y **no es segura**.
 
 ## Tabla de contenidos
 
 - [Características](#características)
 - [Stack tecnológico](#stack-tecnológico)
+- [Prototipo funcional](#prototipo-funcional)
 - [Requisitos previos](#requisitos-previos)
 - [Instalación paso a paso](#instalación-paso-a-paso)
 - [Uso](#uso)
@@ -17,13 +18,25 @@ Plataforma web para la gestión académica y la comunicación institucional de u
 
 ## Características
 
-- **Autenticación por roles:** tres perfiles con permisos diferenciados.
-- **Gestión de usuarios:** alta, baja y edición (solo administración).
-- **Módulo académico:** registro de calificaciones y asistencia por docentes.
-- **Tablón de comunicados:** publicación y lectura de avisos del centro.
-- **Seguridad:** autorización en el servidor, contraseñas con hash y protección de datos de menores.
+- **Autenticación por roles:** cinco perfiles con permisos diferenciados.
+- **Gestión de usuarios:** alta, activación/desactivación y restablecimiento de contraseñas (solo administración).
+- **Módulo académico:** registro de calificaciones y asistencia por docentes, consulta para estudiantes y familias.
+- **Tablón de comunicados:** publicación por roles autorizados y lectura por toda la comunidad.
+- **Reserva de aulas y recursos:** calendario de disponibilidad y detección de conflictos de horario.
+- **Calendario de actividades y exámenes:** evaluaciones, eventos y actividades con filtro por tipo.
+- **Materiales y tareas:** descarga de recursos y entrega de tareas en línea.
+- **Diseño responsivo:** se adapta a computadoras, tabletas y teléfonos móviles.
 
 ## Stack tecnológico
+
+### Prototipo (actual)
+
+| Capa | Tecnología |
+|------|------------|
+| Frontend | HTML5, CSS3, JavaScript y Bootstrap 5 (CDN) |
+| Persistencia | Datos mock en `localStorage` (solo demo) |
+
+### Objetivo (pendiente)
 
 | Capa | Tecnología |
 |------|------------|
@@ -33,118 +46,70 @@ Plataforma web para la gestión académica y la comunicación institucional de u
 | Autenticación | JWT |
 | Contraseñas | bcrypt |
 
+## Prototipo funcional
+
+Incluye:
+
+- Página de inicio de sesión con **cuentas de demostración por rol**.
+- Menú lateral adaptado al rol con los módulos: Inicio, Usuarios, Calificaciones, Asistencia, Comunicados, Reservas, Calendario, Materiales y Tareas, y Horarios.
+- Datos de ejemplo **ficticios** (nunca datos reales de menores) que pueden restablecerse desde el menú.
+- Las ediciones (notas, asistencia, comunicados, reservas, tareas, usuarios) se guardan en el navegador.
+
 ## Requisitos previos
 
-- Node.js **v18 o superior** — [nodejs.org](https://nodejs.org)
-- PostgreSQL **v14 o superior**
-- Git
-- Gestor de paquetes: npm (incluido con Node.js)
+- Un navegador moderno. Opcional: Python o Node.js para servir la carpeta estáticamente.
 
 ## Instalación paso a paso
 
-### 1. Clonar el repositorio
+### Opción A — abrir directamente
+
+Abre `frontend/index.html` en el navegador.
+
+### Opción B — servidor estático (recomendado)
 
 ```bash
-git clone <url-del-repositorio> intranet-escolar
-cd intranet-escolar
+cd frontend
+python -m http.server 8080
 ```
 
-### 2. Configurar la base de datos
-
-Crea la base de datos en PostgreSQL:
-
-```sql
-CREATE DATABASE intranet_escolar;
-```
-
-### 3. Configurar las variables de entorno
-
-Copia el archivo de ejemplo y edítalo con tus valores locales:
-
-```bash
-cp server/.env.example server/.env
-```
-
-Configura al menos:
-
-```env
-PORT=3000
-DATABASE_URL=postgres://usuario:contrasena@localhost:5432/intranet_escolar
-JWT_SECRET=genera_un_secreto_largo_y_aleatorio
-```
-
-> ⚠️ **Importante:** `.env` no se versiona. Nunca subas credenciales o secretos reales al repositorio.
-
-### 4. Ejecutar las migraciones
-
-```bash
-cd server
-npm run migrate
-```
-
-### 5. Instalar dependencias del backend
-
-```bash
-cd server
-npm install
-```
-
-### 6. Instalar dependencias del frontend
-
-```bash
-cd ../client
-npm install
-```
-
-### 7. Ejecutar la aplicación en desarrollo
-
-Terminal 1 — backend:
-
-```bash
-cd server
-npm run dev
-```
-
-Terminal 2 — frontend:
-
-```bash
-cd client
-npm run dev
-```
+Luego entra en `http://localhost:8080`.
 
 ## Uso
 
-1. Abre el frontend en `http://localhost:5173` (por defecto en Vite).
-2. Inicia sesión con las credenciales de tu rol (administración, docente o estudiante/familia).
-3. Según tu rol podrás: gestionar usuarios, registrar calificaciones/asistencia o consultar datos y leer comunicados.
+1. Abre la página de inicio (`index.html`).
+2. Selecciona una cuenta de demostración (o usa el acceso rápido por rol). Cualquier contraseña funciona en el prototipo.
+3. Explora los módulos según el rol:
 
-### Scripts disponibles
-
-| Script | Descripción |
-|--------|-------------|
-| `npm run dev` (server) | Ejecuta el backend en modo desarrollo con recarga automática. |
-| `npm run dev` (client) | Ejecuta el frontend en modo desarrollo. |
-| `npm test` | Ejecuta las pruebas del paquete. |
-| `npm run lint` | Ejecuta el linter del paquete. |
-| `npm run migrate` | Aplica las migraciones de la base de datos. |
+| Cuenta | Rol | Puede hacer |
+|--------|-----|-------------|
+| María López | Administrador | Gestionar usuarios, retirar comunicados, consultar todo |
+| Carlos Ríos | Docente | Registrar calificaciones y asistencia, publicar comunicados, reservar recursos |
+| Laura Fernández | Personal Administrativo | Publicar comunicados, reservar recursos, consultar calificaciones |
+| Ana Torres | Estudiante | Consultar notas, horario y asistencia; entregar tareas |
+| Raquel Torres | Familia | Seguimiento académico de su estudiante |
 
 ## Estructura del proyecto
 
 ```
 intranet-escolar/
-├── client/          # Frontend React
-├── server/          # Backend Node.js
-├── docs/            # Documentación del proyecto
+├── frontend/       # Prototipo funcional (HTML/CSS/JS + Bootstrap)
+│   ├── index.html
+│   ├── dashboard.html
+│   ├── css/styles.css
+│   └── js/         # util, datos, auth, app, login, modulos/
+├── docs/           # Documentación del proyecto
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
 └── CLAUDE.md
 ```
 
+> `client/` (React) y `server/` (Node.js) se crearán en la implementación con backend.
+
 ## Documentación
 
-- [Requerimientos](docs/requerimientos.md) — requerimientos funcionales y no funcionales.
-- [Arquitectura](docs/arquitectura.md) — decisiones técnicas, estructura y API.
+- [Requerimientos](docs/requerimientos.md) — requerimientos funcionales y no funcionales, roles y prototipo.
+- [Arquitectura](docs/arquitectura.md) — decisiones técnicas, prototipo, estructura y API propuesta.
 - [Contribución](CONTRIBUTING.md) — guía para colaborar.
 - [Cambios](CHANGELOG.md) — historial de versiones.
 

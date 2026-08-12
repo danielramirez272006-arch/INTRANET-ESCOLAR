@@ -13,10 +13,13 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
 ## 2. Requerimientos
 
 ### Funcionales
-- [ ] **Autenticación por roles:** acceso con tres perfiles — administración, docente y estudiante/familia.
-- [ ] **Gestión de usuarios:** alta, baja y edición de usuarios del sistema.
+- [ ] **Autenticación por roles:** acceso con cinco perfiles — administración, docente, personal administrativo, estudiante y familia.
+- [ ] **Gestión de usuarios:** alta, baja y edición de usuarios del sistema (solo administración).
 - [ ] **Módulo académico:** registro de calificaciones y/o asistencia por parte de docentes.
 - [ ] **Tablón de comunicados:** publicación y lectura de avisos del centro.
+- [ ] **Reserva de aulas y recursos:** disponibilidad, reservas y gestión de conflictos de horario.
+- [ ] **Calendario académico:** evaluaciones, actividades y eventos institucionales.
+- [ ] **Materiales y tareas:** recursos educativos y entrega de tareas en línea.
 - [ ] **Restricción de acceso:** cada rol solo puede ver y operar sobre lo que le corresponde.
 
 ### No funcionales
@@ -57,14 +60,19 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
 ## 6. Memoria
 
 - **Decisiones tomadas:**
-  - Stack propuesto: React (frontend), Node.js (backend), PostgreSQL (base de datos).
-  - Modelo de tres roles: administración, docente y estudiante/familia.
+  - Stack propuesto (objetivo): React (frontend), Node.js (backend), PostgreSQL (base de datos).
+  - Modelo de cinco roles: administración, docente, personal administrativo, estudiante y familia.
+  - Prototipo frontend funcional en HTML/CSS/JS + Bootstrap con datos mock y sin backend (2026-08-12). Es una **desviación temporal** del stack objetivo, justificada para validar interfaz; documentada en `docs/arquitectura.md` (ADR).
 - **Progreso del proyecto:**
   - Repositorio Git inicializado (commit inicial).
-  - Documentación raíz en redacción (README, CLAUDE.md, CONTRIBUTING.md, CHANGELOG.md, docs/).
+  - Documentación raíz (README, CLAUDE.md, CONTRIBUTING.md, CHANGELOG.md, docs/).
+  - Prototipo frontend en `frontend/` con login por rol, menú según rol y módulos de usuarios, calificaciones, asistencia, comunicados, reservas, calendario, materiales/tareas y horarios. Datos ficticios con persistencia en `localStorage`.
 - **Próximos pasos pendientes:**
-  - Definir el modelo de datos y la estructura de la API.
-  - Esquematizar la estructura de carpetas del proyecto (monorepo o frontend/backend separados).
+  - Definir el modelo de datos definitivo y la estructura de la API.
+  - Implementar backend Node.js/Express con autorización en servidor y PostgreSQL.
+  - Migrar el frontend del prototipo a React (stack objetivo).
+  - Reemplazar la sesión simulada del prototipo por autenticación real (JWT + bcrypt).
+  - Agregar pruebas automatizadas del prototipo.
   - Registrar decisiones futuras aquí a medida que se tomen.
 
 ## 7. Buenas Prácticas

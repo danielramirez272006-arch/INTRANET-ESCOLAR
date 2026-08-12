@@ -1,17 +1,17 @@
 # Arquitectura — Intranet Escolar
 
 > Documento de arquitectura del proyecto **Intranet Escolar**.
-> Versión: 0.1.0 · Estado: en planificación · Última actualización: 2026-08-12
+> Versión: 0.2.0 · Estado: prototipo frontend funcional + arquitectura objetivo · Última actualización: 2026-08-12
 
 ## 1. Visión general
 
-La Intranet Escolar se construye como una **aplicación web de tres capas** con frontend y backend separados:
+La Intranet Escolar se construirá como una **aplicación web de tres capas** con frontend y backend separados:
 
 - **Frontend:** SPA en React que consume la API REST del backend.
 - **Backend:** API REST en Node.js (Express) que concentra la lógica de negocio y la autorización.
 - **Base de datos:** PostgreSQL, única fuente de verdad de los datos.
 
-La comunicación entre capas se realiza exclusivamente a través de la API REST. El frontend **nunca** decide autorizaciones: solo presenta la interfaz y envía peticiones; el servidor valida cada operación.
+La comunicación entre capas se realizará exclusivamente a través de la API REST. El frontend **nunca** decide autorizaciones: solo presenta la interfaz y envía peticiones; el servidor valida cada operación.
 
 ```
 +----------------+     HTTPS      +----------------+      SQL      +--------------+
@@ -20,34 +20,63 @@ La comunicación entre capas se realiza exclusivamente a través de la API REST.
 +----------------+    JSON       +----------------+              +--------------+
 ```
 
+## 1.1 Prototipo actual (frontend estático sin backend)
+
+Para validar la interfaz y los flujos de los cinco roles se construyó un **prototipo funcional** en `frontend/` con tecnología distinta al stack objetivo:
+
+- **Tecnología:** HTML5 + CSS3 + JavaScript (vanilla) + Bootstrap 5 (vía CDN).
+- **Datos:** mock ficticios en `frontend/js/datos.js`, con persistencia en `localStorage` (botón "Restablecer datos de demo").
+- **Sesión:** simulada en `localStorage`; los roles se conmutan con cuentas de demostración.
+- **Autorización:** el menú y las vistas se filtran por rol en el frontend.
+
+> ⚠️ **Advertencia:** este prototipo es solo para demostración. La autenticación y autorización simuladas en el frontend **no son seguras** y deben reemplazarse por la solución con backend (sección 3). Bootstrap se consume por CDN; en producción se descargará/versionará o se migrará al stack objetivo.
+
+Estructura del prototipo:
+
+```
+frontend/
+├── index.html            # Inicio de sesión (cuentas de demostración por rol)
+├── dashboard.html        # Aplicación principal con menú por rol
+├── css/styles.css        # Estilos propios sobre Bootstrap
+└── js/
+    ├── util.js           # Helpers ($, $$, escape HTML)
+    ├── datos.js          # Datos mock ficticios y generadores
+    ├── auth.js           # Sesión simulada (localStorage) y roles
+    ├── app.js            # Menú, enrutado de vistas, carga de datos
+    ├── login.js          # Lógica de la página de acceso
+    └── modulos/          # Renderizadores por módulo
+        ├── inicio.js     # Resumen por rol
+        ├── usuarios.js   # Gestión de usuarios
+        ├── calificaciones.js
+        ├── asistencia.js
+        ├── comunicados.js
+        ├── reservas.js
+        └── consultas.js  # Calendario, materiales y horarios
+```
+
 ## 2. Decisiones técnicas
 
 | Decisión | Opción | Justificación |
 |----------|--------|---------------|
-| Frontend | React (Vite) | Componentes reutilizables, ecosistema maduro, requisito del proyecto. |
+| Frontend (objetivo) | React (Vite) | Componentes reutilizables, ecosistema maduro, requisito del proyecto. |
+| Frontend (prototipo) | HTML/CSS/JS + Bootstrap 5 | Validación rápida de interfaz sin toolchain; **desviación justificada** y documentada. |
 | Backend | Node.js + Express | API ligera, mismo lenguaje que el frontend, control total sobre la autorización. |
 | Base de datos | PostgreSQL | Relacional, robusta, transacciones ACID para datos académicos. |
 | Autenticación | JWT (sesión con token de acceso de corta duración) | Stateless, válido para API REST. |
 | Contraseñas | bcrypt (hash con sal) | Almacenamiento seguro de credenciales. |
 | Variables de entorno | `.env` (no versionado) | Credenciales y secretos fuera del repositorio. |
 | Migraciones de BD | Scripts SQL versionados | Cambios de esquema reproducibles y revisables. |
+| Persistencia del prototipo | `localStorage` del navegador | Solo demo; los datos quedan aislados por navegador. |
 
 > Estas decisiones son de referencia. Cualquier desviación debe justificarse, documentarse y registrarse en la sección de decisiones de este documento y en `CLAUDE.md`.
 
 ## 3. Modelo de roles y autorización
 
-- Tres roles: `administracion`, `docente`, `estudiante/familia`.
-- La autorización se aplica en el servidor mediante un **middleware de autenticación** (valida el token) y un **middleware de autorización** (valida el rol por ruta y por operación).
-- Cada rol tiene una matriz de permisos:
+Cinco roles: `administracion`, `docente`, `personal_administrativo`, `estudiante` y `familia`.
 
-| Operación | administracion | docente | estudiante/familia |
-|-----------|:---:|:---:|:---:|
-| Gestionar usuarios | ✅ | ❌ | ❌ |
-| Registrar calificaciones/asistencia | ❌ | ✅ | ❌ |
-| Consultar datos académicos propios | ✅ (consulta) | ✅ (su curso) | ✅ (sus estudiantes) |
-| Publicar comunicados | ✅ | ✅ | ❌ |
-| Leer comunicados | ✅ | ✅ | ✅ |
-| Gestionar comunicados (editar/retirar) | ✅ | ❌ | ❌ |
+La autorización se aplicará en el servidor mediante un **middleware de autenticación** (valida el token) y un **middleware de autorización** (valida el rol por ruta y por operación). En el prototipo el rol solo oculta/ muestra opciones en la interfaz, lo cual **no es una medida de seguridad**.
+
+Matriz de permisos (ver `docs/requerimientos.md`, sección 7).
 
 ## 4. Modelo de datos (borrador)
 
@@ -57,42 +86,51 @@ Entidades principales propuestas para la base de datos:
 - `estudiantes` — datos académicos de los menores (vinculados a usuarios familia/estudiante).
 - `cursos` — agrupaciones de estudiantes.
 - `materias` — asignaturas impartidas.
-- `calificaciones` — notas por estudiante, materia y periodo.
-- `asistencias` — registros de presencia por estudiante y fecha.
-- `comunicados` — avisos publicados en el tablón.
 - `periodos` — periodos/trimestres académicos.
+- `calificaciones` — notas por estudiante, materia y periodo.
+- `asistencias` — registros de presencia por estudiante y fecha (Presente/Ausente/Justificado/Tardanza).
+- `comunicados` — avisos publicados en el tablón (con categoría).
+- `recursos` — aulas, laboratorios y equipos.
+- `reservas` — reservas de recursos con fecha y horario.
+- `calendario` — evaluaciones, actividades y eventos institucionales.
+- `materiales` — recursos educativos y tareas por materia.
+- `entregas` — entregas de tareas por estudiante.
 
-> El esquema detallado (columnas, relaciones, constraints) se definirá en la fase de implementación y se registrará aquí.
+> El esquema detallado (columnas, relaciones, constraints) se definirá en la fase de implementación y se registrará aquí. El prototipo ya modela estas entidades con datos ficticios en `frontend/js/datos.js`.
 
 ## 5. Estructura de carpetas propuesta
 
 ```
 INTRANET-ESCOLAR/
-├── client/                  # Frontend React
-│   ├── public/
+├── frontend/               # Prototipo funcional (HTML/CSS/JS + Bootstrap)
+│   ├── index.html
+│   ├── dashboard.html
+│   ├── css/
+│   └── js/                 # util, datos, auth, app, login, modulos/
+├── client/                 # Frontend React (objetivo, pendiente)
 │   └── src/
 │       ├── components/
 │       ├── pages/
-│       ├── services/        # Cliente de la API
+│       ├── services/       # Cliente de la API
 │       └── ...
-├── server/                  # Backend Node.js
+├── server/                 # Backend Node.js (pendiente)
 │   ├── src/
-│   │   ├── middleware/      # auth, autorización por rol
-│   │   ├── routes/          # endpoints de la API
+│   │   ├── middleware/     # auth, autorización por rol
+│   │   ├── routes/         # endpoints de la API
 │   │   ├── controllers/
-│   │   ├── models/          # acceso a PostgreSQL
-│   │   ├── utils/           # validaciones, helpers
+│   │   ├── models/         # acceso a PostgreSQL
+│   │   ├── utils/          # validaciones, helpers
 │   │   └── ...
-│   ├── migrations/          # scripts SQL de migración
+│   ├── migrations/         # scripts SQL de migración
 │   └── tests/
-├── docs/                    # documentación del proyecto
+├── docs/                   # documentación del proyecto
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
 └── CLAUDE.md
 ```
 
-> Se evaluará la separación en paquetes propios (`client/` y `server/`) con un workspace raíz para simplificar la instalación y ejecución.
+> El prototipo convive en `frontend/`; el `client/` React se creará cuando comience la implementación con backend.
 
 ## 6. API propuesta (endpoints principales)
 
@@ -108,12 +146,15 @@ INTRANET-ESCOLAR/
 | GET | `/api/asistencias/:estudianteId` | autorizado | Consultar asistencia de un estudiante. |
 | GET/POST | `/api/comunicados` | autenticado / publicar | Listar / publicar avisos. |
 | PUT/DELETE | `/api/comunicados/:id` | administracion | Editar/retirar avisos. |
+| GET/POST | `/api/recursos/:id/reservas` | docente/staff | Consultar/reservar recursos. |
+| GET | `/api/calendario` | autenticado | Consultar actividades y exámenes. |
+| GET/POST | `/api/materiales` | autenticado / docente | Consultar/publicar materiales y tareas. |
 
 > Los endpoints se documentarán en detalle (request/response) en la fase de implementación.
 
 ## 7. Consideraciones de seguridad
 
-- Autenticación y autorización resueltas **siempre en el servidor**.
+- Autenticación y autorización resueltas **siempre en el servidor** (el prototipo solo la simula).
 - Contraseñas hasheadas con bcrypt; nunca en texto plano.
 - Consultas SQL parametrizadas (previene inyección).
 - Validación de toda entrada de usuario en el servidor.
@@ -127,9 +168,11 @@ INTRANET-ESCOLAR/
 |-------|----------|---------------|
 | 2026-08-12 | Stack React + Node.js + PostgreSQL | Requisito del proyecto y capacidades del equipo. |
 | 2026-08-12 | API REST con JWT | Separación frontend/backend y sesiones stateless. |
+| 2026-08-12 | Prototipo frontend en HTML/CSS/JS + Bootstrap con datos mock | Validar interfaz y flujos de los 5 roles sin backend; **desviación temporal** del stack objetivo, documentada y registrada. |
 
 ## 9. Historial del documento
 
 | Fecha | Versión | Descripción |
 |-------|---------|-------------|
 | 2026-08-12 | 0.1.0 | Versión inicial: visión, decisiones, roles, modelo de datos, estructura y API propuesta. |
+| 2026-08-12 | 0.2.0 | Se agrega el prototipo frontend funcional (`frontend/`), cinco roles y módulos nuevos; se registra la desviación del stack en ADR. |

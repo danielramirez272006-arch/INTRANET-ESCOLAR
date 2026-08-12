@@ -21,6 +21,16 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 
 - Eliminada la carpeta `client` (no versionada en Git) con todo su contenido, incluido el frontend de prueba.
 
+### Agregado
+
+- Prototipo funcional frontend en `frontend/` (HTML5 + CSS3 + JavaScript + Bootstrap 5, sin backend):
+  - Inicio de sesión con cuentas de demostración por rol.
+  - Menú según el rol y módulos de usuarios, calificaciones, asistencia, comunicados, reservas, calendario, materiales/tareas y horarios.
+  - Datos de prueba ficticios con persistencia en `localStorage` y botón de restablecimiento.
+- Actualización de `docs/requerimientos.md` (v0.2.0): cinco roles y módulos nuevos.
+- Actualización de `docs/arquitectura.md` (v0.2.0): prototipo frontend y ADR de la desviación del stack.
+- Actualización de `README.md` con instrucciones de uso del prototipo.
+
 ## [0.1.0] - 2026-08-12
 
 ### Agregado
