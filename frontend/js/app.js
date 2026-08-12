@@ -98,30 +98,88 @@ function mostrarVista(vista) {
 }
 
 function construirLayout(usuario) {
-  $("#usuario-nombre").textContent = usuario.nombre;
-  $("#usuario-rol").textContent = nombreRol(usuario.rol);
+  const nombreEl = $("#usuario-nombre");
+  const rolBadgeEl = $("#usuario-rol-badge");
+  const avatarNavEl = $("#usuario-avatar-nav");
 
-  const items = (MENU[usuario.rol] || []).map((m) =>
+  if (nombreEl) nombreEl.textContent = usuario.nombre;
+  
+  if (rolBadgeEl) {
+    const rolClase = {
+      docente: "badge-rol-docente",
+      estudiante: "badge-rol-estudiante",
+      familia: "badge-rol-familia"
+    }[usuario.rol] || "bg-secondary text-white";
+    
+    const rolIcono = {
+      docente: "mortarboard-fill",
+      estudiante: "backpack-fill",
+      familia: "people-fill"
+    }[usuario.rol] || "person";
+
+    rolBadgeEl.innerHTML = `<span class="badge-rol ${rolClase}">
+      <i class="bi bi-${rolIcono}"></i> ${nombreRol(usuario.rol)}
+    </span>`;
+  }
+
+  if (avatarNavEl && usuario.nombre) {
+    const iniciales = usuario.nombre.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+    avatarNavEl.textContent = iniciales;
+  }
+
+  const itemsSidebar = `
+    <div class="sidebar-categoria">Portal</div>
+    <a class="nav-link" href="#" data-vista="inicio"><i class="bi bi-speedometer2"></i> Inicio</a>
+    
+    <div class="sidebar-categoria mt-2">Gestión Académica</div>
+    ${(usuario.rol === 'docente' ? `
+      <a class="nav-link" href="#" data-vista="calificaciones"><i class="bi bi-clipboard-data"></i> Calificaciones</a>
+      <a class="nav-link" href="#" data-vista="asistencia"><i class="bi bi-calendar2-check"></i> Asistencia</a>
+      <a class="nav-link" href="#" data-vista="horarios"><i class="bi bi-clock-history"></i> Horarios</a>
+      <a class="nav-link" href="#" data-vista="materiales"><i class="bi bi-journal-bookmark-fill"></i> Materiales y Tareas</a>
+    ` : `
+      <a class="nav-link" href="#" data-vista="calificaciones"><i class="bi bi-clipboard-data"></i> ${usuario.rol === 'estudiante' ? 'Mis notas' : 'Notas del estudiante'}</a>
+      <a class="nav-link" href="#" data-vista="asistencia"><i class="bi bi-calendar2-check"></i> Asistencia</a>
+      <a class="nav-link" href="#" data-vista="horarios"><i class="bi bi-clock-history"></i> Mi Horario</a>
+      <a class="nav-link" href="#" data-vista="materiales"><i class="bi bi-journal-bookmark-fill"></i> Materiales y Tareas</a>
+    `)}
+
+    <div class="sidebar-categoria mt-2">Vida Escolar</div>
+    <a class="nav-link" href="#" data-vista="comunicados"><i class="bi bi-megaphone"></i> Comunicados</a>
+    <a class="nav-link" href="#" data-vista="calendario"><i class="bi bi-calendar-event"></i> Calendario Escolar</a>
+    ${usuario.rol === 'docente' ? '<a class="nav-link" href="#" data-vista="reservas"><i class="bi bi-door-open"></i> Reserva de Aulas</a>' : ''}
+  `;
+
+  const itemsMovil = (MENU[usuario.rol] || []).map((m) =>
     `<a class="nav-link" href="#" data-vista="${m.vista}"><i class="bi bi-${m.icono}"></i> ${esc(m.etiqueta)}</a>`
   ).join("");
-  $("#sidebar-lista").innerHTML = items;
-  $("#menu-movil-lista").innerHTML = items;
+
+  const sidebarEl = $("#sidebar-lista");
+  const movilEl = $("#menu-movil-lista");
+
+  if (sidebarEl) sidebarEl.innerHTML = itemsSidebar;
+  if (movilEl) movilEl.innerHTML = itemsMovil;
 
   document.querySelectorAll("#sidebar-lista, #menu-movil-lista").forEach((nav) => {
     nav.addEventListener("click", (event) => {
       const enlace = event.target.closest("a[data-vista]");
       if (!enlace) return;
       event.preventDefault();
-      const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById("menu-movil"));
-      if (offcanvas) offcanvas.hide();
+      const offcanvasEl = document.getElementById("menu-movil");
+      if (offcanvasEl && bootstrap.Offcanvas.getInstance(offcanvasEl)) {
+        bootstrap.Offcanvas.getInstance(offcanvasEl).hide();
+      }
       mostrarVista(enlace.dataset.vista);
     });
   });
 
-  $("#btn-cerrar-sesion").addEventListener("click", () => {
-    cerrarSesion();
-    location.href = "index.html";
-  });
+  const btnCerrar = $("#btn-cerrar-sesion");
+  if (btnCerrar) {
+    btnCerrar.addEventListener("click", () => {
+      cerrarSesion();
+      location.href = "index.html";
+    });
+  }
 
   const btnRestablecer = $("#btn-restablecer");
   if (btnRestablecer) {
