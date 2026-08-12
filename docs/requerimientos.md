@@ -124,7 +124,7 @@ Un entregable se considera **aceptado** cuando:
 **Limitaciones conocidas (se resolverán con el backend):**
 
 - La autenticación y la autorización están **simuladas en el frontend**; no son seguras y no deben usarse en producción. El sistema final resuelve ambas en el servidor (RF-08.1).
-- Las contraseñas no se almacenan ni se validan realmente (RF-01.2 pendiente).
+- Aunque el demo verifica un hash con sal en el navegador, las contraseñas y la sesión no tienen protección de servidor; el sistema final usará bcrypt y autenticación en el backend.
 - No hay notificaciones reales, correo electrónico ni persistencia centralizada.
 
 ## 7. Roles y matriz de permisos (referencia)
@@ -145,3 +145,4 @@ Un entregable se considera **aceptado** cuando:
 |-------------|---------|---------------------------------------------------|
 | 2026-08-12  | 0.1.0   | Versión inicial de requerimientos funcionales y no funcionales. |
 | 2026-08-12  | 0.2.0   | Nuevos roles (personal_administrativo, estudiante, familia), módulos de reservas, calendario y materiales/tareas; sección de prototipo frontend. |
+| 2026-08-12  | 0.3.0   | El prototipo se limita a docente, estudiante y familia; se documentan sus permisos y el acceso con contraseña demo. |

@@ -18,7 +18,7 @@ Plataforma web para la gestión académica y comunicativa de una institución ed
 
 ## Características
 
-- **Autenticación por roles:** cinco perfiles con permisos diferenciados.
+- **Autenticación por roles:** tres perfiles con permisos diferenciados: docente, estudiante y familia.
 - **Módulo académico:** registro de calificaciones y asistencia por docentes, consulta para estudiantes y familias.
 - **Tablón de comunicados:** publicación por roles autorizados y lectura por toda la comunidad.
 - **Reserva de aulas y recursos:** calendario de disponibilidad y detección de conflictos de horario.
@@ -51,9 +51,10 @@ Plataforma web para la gestión académica y comunicativa de una institución ed
 Incluye:
 
 - Página de inicio de sesión con **cuentas de demostración por rol**.
-- Menú lateral adaptado al rol con los módulos: Inicio, Usuarios, Calificaciones, Asistencia, Comunicados, Reservas, Calendario, Materiales y Tareas, y Horarios.
+- Menú lateral adaptado al rol con los módulos: Inicio, Calificaciones, Asistencia, Comunicados, Reservas, Calendario, Materiales y Tareas, y Horarios.
 - Datos de ejemplo **ficticios** (nunca datos reales de menores) que pueden restablecerse desde el menú.
-- Las ediciones (notas, asistencia, comunicados, reservas, tareas, usuarios) se guardan en el navegador.
+- Las ediciones (notas, asistencia, comunicados, reservas, materiales y tareas) se guardan en el navegador.
+- Todas las cuentas demo usan la contraseña `demo2026`; el acceso se realiza únicamente con cuenta y contraseña.
 
 ## Requisitos previos
 
@@ -82,7 +83,7 @@ Luego entra en `http://localhost:8080`.
 
 | Cuenta | Rol | Puede hacer |
 |--------|-----|-------------|
-| Carlos Ríos | Docente | Registrar calificaciones y asistencia, publicar comunicados, reservar recursos |
+| Carlos Ríos | Docente | Registrar calificaciones y asistencia, publicar materiales y comunicados, reservar recursos |
 | Ana Torres | Estudiante | Consultar notas, horario y asistencia; entregar tareas |
 | Raquel Torres | Familia | Seguimiento académico de su estudiante |
 

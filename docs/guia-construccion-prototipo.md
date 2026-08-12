@@ -41,7 +41,7 @@ frontend/
 ### 4.1 Estilos y páginas base
 
 1. Se creó `css/styles.css` (variables, sidebar fija, tarjetas, avatar) sobre Bootstrap 5.
-2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración y formulario.
+2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración y formulario; todas las cuentas usan `demo2026` y no hay acceso rápido por rol.
 3. `dashboard.html`: navbar superior, sidebar para escritorio, offcanvas para móvil y un contenedor `#vista-<modulo>` por módulo.
 
 ### 4.2 Datos de prueba (js/datos.js)

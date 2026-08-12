@@ -65,7 +65,7 @@ Este archivo es la **memoria de trabajo** para el asistente de IA que colabore e
 - **Progreso del proyecto:**
   - Repositorio Git inicializado (commit inicial).
   - Documentación raíz (README, CLAUDE.md, CONTRIBUTING.md, CHANGELOG.md, docs/).
-  - Prototipo frontend en `frontend/` con login por rol, menú según rol y módulos de usuarios, calificaciones, asistencia, comunicados, reservas, calendario, materiales/tareas y horarios. Datos ficticios con persistencia en `localStorage`.
+  - Prototipo frontend en `frontend/` con login por cuenta y contraseña, tres roles (docente, estudiante y familia) y módulos de calificaciones, asistencia, comunicados, reservas, calendario, materiales/tareas y horarios. Datos ficticios con persistencia en `localStorage`.
 - **Próximos pasos pendientes:**
   - Definir el modelo de datos definitivo y la estructura de la API.
   - Implementar backend Node.js/Express con autorización en servidor y PostgreSQL.
