@@ -17,6 +17,10 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
   - `docs/arquitectura.md`: decisiones técnicas, stack, estructura y API propuesta.
 - `CHANGELOG.md`: historial de versiones del proyecto.
 
+### Eliminado
+
+- Eliminada la carpeta `client` (no versionada en Git) con todo su contenido, incluido el frontend de prueba.
+
 ## [0.1.0] - 2026-08-12
 
 ### Agregado
