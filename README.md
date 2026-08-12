@@ -110,6 +110,7 @@ intranet-escolar/
 
 - [Requerimientos](docs/requerimientos.md) — requerimientos funcionales y no funcionales, roles y prototipo.
 - [Arquitectura](docs/arquitectura.md) — decisiones técnicas, prototipo, estructura y API propuesta.
+- [Cómo se construyó el prototipo](docs/guia-construccion-prototipo.md) — decisiones, estructura y verificación del prototipo frontend.
 - [Contribución](CONTRIBUTING.md) — guía para colaborar.
 - [Cambios](CHANGELOG.md) — historial de versiones.
 

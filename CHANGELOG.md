@@ -30,6 +30,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 - Actualización de `docs/requerimientos.md` (v0.2.0): cinco roles y módulos nuevos.
 - Actualización de `docs/arquitectura.md` (v0.2.0): prototipo frontend y ADR de la desviación del stack.
 - Actualización de `README.md` con instrucciones de uso del prototipo.
+- `docs/guia-construccion-prototipo.md`: proceso seguido para construir el prototipo (decisiones, estructura, datos y verificación).
+- Requisito no funcional precisado: el código se versiona en Git desde el inicio del proyecto (RNF-03.1).
 
 ## [0.1.0] - 2026-08-12
 
