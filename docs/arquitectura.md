@@ -1,7 +1,7 @@
 # Arquitectura — Intranet Escolar
 
 > Documento de arquitectura del proyecto **Intranet Escolar**.
-> Versión: 0.4.0 · Estado: prototipo frontend funcional + identidad visual escolar + arquitectura objetivo · Última actualización: 2026-08-12
+> Versión: 0.4.1 · Estado: prototipo frontend funcional + identidad visual escolar + arquitectura objetivo · Última actualización: 2026-08-12
 
 ## 1. Visión general
 
@@ -51,10 +51,11 @@ frontend/
         ├── asistencia.js
         ├── comunicados.js
         ├── reservas.js
-        └── consultas.js  # Calendario, materiales y horarios
+        ├── consultas.js  # Calendario, materiales y horarios
+        └── usuarios.js   # Gestión local de usuarios para docentes
 ```
 
-> Las contraseñas demo se guardan hasheadas (SHA-256 con sal) en `localStorage`. Sigue siendo una simulación de demostración: la seguridad real requiere el backend (sección 3).
+> Las contraseñas demo se guardan hasheadas (SHA-256 con sal) en `localStorage` y cada cuenta demo tiene una contraseña distinta. Los cambios de versión de los datos locales migran las credenciales y las entregas ya almacenadas. Sigue siendo una simulación de demostración: la seguridad real requiere el backend (sección 3).
 
 ## 2. Decisiones técnicas
 
@@ -169,6 +170,7 @@ INTRANET-ESCOLAR/
 | 2026-08-12 | Stack React + Node.js + PostgreSQL | Requisito del proyecto y capacidades del equipo. |
 | 2026-08-12 | API REST con JWT | Separación frontend/backend y sesiones stateless. |
 | 2026-08-12 | Prototipo frontend en HTML/CSS/JS + Bootstrap con datos mock | Validar interfaz y flujos de los 5 roles sin backend; **desviación temporal** del stack objetivo, documentada y registrada. |
+| 2026-08-12 | Credenciales demo individuales y migración local v6 | Evitar una clave compartida entre cuentas demo y preservar el estado local al corregir el modelo de entregas. |
 
 ## 9. Historial del documento
 
@@ -178,3 +180,4 @@ INTRANET-ESCOLAR/
 | 2026-08-12 | 0.2.0 | Se agrega el prototipo frontend funcional (`frontend/`), tres roles y módulos nuevos; se registra la desviación del stack en ADR. |
 | 2026-08-12 | 0.3.0 | Se documenta el acceso con contraseña demo, la eliminación de acceso rápido y la limitación a tres roles. |
 | 2026-08-12 | 0.4.0 | Identidad visual de Liceo Escolar San Miguel (escudo, badges, hero banner, categorías), soporte UTF-8 en crypto y suite de pruebas unitarias. |
+| 2026-08-12 | 0.4.1 | Corrección del registro de notas, entregas vinculadas al estudiante, módulo de usuarios integrado y credenciales demo individuales. |
