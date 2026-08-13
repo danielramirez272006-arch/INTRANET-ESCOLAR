@@ -1,6 +1,10 @@
 const COLORES_TIPO = { Examen: "danger", Evento: "primary", Actividad: "success", Reunión: "warning" };
 const COLORES_MATERIAL = { PDF: "danger", Enlace: "info", Tarea: "warning" };
 
+function claveEntrega(estudianteId, materialId) {
+  return `${estudianteId}:${materialId}`;
+}
+
 registrarVista("calendario", renderCalendario);
 registrarVista("materiales", renderMateriales);
 registrarVista("horarios", renderHorarios);
@@ -56,7 +60,9 @@ function tablaMateriales(items) {
   const filas = items.map((material) => {
     const materia = DB.materias.find((m) => m.id === material.materiaId);
     const esTarea = material.entrega === true;
-    const entregada = esTarea && (DB.entregas || {})[`${usuario.email}:${material.id}`];
+    const entregada = esTarea && usuario.estudianteId
+      ? (DB.entregas || {})[claveEntrega(usuario.estudianteId, material.id)]
+      : false;
 
     let accion;
     if (esTarea && usuario.rol === "estudiante") {
@@ -122,7 +128,7 @@ function renderMateriales() {
 
     $$("#tabla-materiales .btn-entregar").forEach((btn) => btn.addEventListener("click", () => {
       const entregas = DB.entregas || (DB.entregas = {});
-      const clave = `${usuario.email}:${btn.dataset.id}`;
+      const clave = claveEntrega(usuario.estudianteId, btn.dataset.id);
       entregas[clave] = !entregas[clave];
       guardarDatos();
       dibujar();
