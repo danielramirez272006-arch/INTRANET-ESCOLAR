@@ -54,7 +54,7 @@
         form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true, submitter: document.getElementById("btn-submit") }));
         reporte.push("requiere contraseña: " + !alerta.classList.contains("d-none") + " | " + alerta.textContent);
 
-        contrasena.value = "demo2026";
+        contrasena.value = "Docente2026!";
         form.dispatchEvent(new SubmitEvent("submit", { bubbles: true, cancelable: true, submitter: document.getElementById("btn-submit") }));
         const sesion = JSON.parse(localStorage.getItem("intranet_sesion"));
         reporte.push("sesion creada: " + (sesion && sesion.rol === "docente"));
