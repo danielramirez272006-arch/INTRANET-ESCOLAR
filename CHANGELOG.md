@@ -4,6 +4,20 @@ Todos los cambios relevantes de este proyecto se documentan en este archivo.
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y este proyecto se adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [0.4.1] - 2026-08-12
+
+### Corregido
+
+- Al guardar, el módulo de calificaciones crea los registros que no existían previamente; las notas nuevas ya persisten en `localStorage`.
+- Las entregas de tareas se vinculan por estudiante y material, por lo que la familia ve el estado real de entrega de su estudiante.
+- Se integró la vista y el script de gestión de usuarios en el dashboard para docentes.
+- El restablecimiento de contraseña solicita una nueva clave válida en lugar de asignar una contraseña común.
+
+### Cambiado
+
+- Las cuatro cuentas demo ahora usan contraseñas individuales, verificadas por hash SHA-256 con sal. Las credenciales de uso están documentadas en `README.md`.
+- La versión de datos locales se elevó a 6 e incluye una migración de credenciales demo y entregas existentes.
+
 ## [0.4.0] - 2026-08-12
 
 ### Visuales & UX

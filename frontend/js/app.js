@@ -1,4 +1,4 @@
-const VISTAS = ["inicio", "calificaciones", "asistencia", "comunicados", "reservas", "calendario", "materiales", "horarios"];
+const VISTAS = ["inicio", "calificaciones", "asistencia", "comunicados", "reservas", "calendario", "materiales", "horarios", "usuarios"];
 
 const MENU = {
   docente: [
@@ -9,7 +9,8 @@ const MENU = {
     { vista: "reservas", etiqueta: "Reservas", icono: "door-open" },
     { vista: "calendario", etiqueta: "Calendario", icono: "calendar-event" },
     { vista: "materiales", etiqueta: "Materiales y Tareas", icono: "folder2-open" },
-    { vista: "horarios", etiqueta: "Horarios", icono: "table" }
+    { vista: "horarios", etiqueta: "Horarios", icono: "table" },
+    { vista: "usuarios", etiqueta: "Usuarios", icono: "people" }
   ],
   estudiante: [
     { vista: "inicio", etiqueta: "Inicio", icono: "speedometer2" },
@@ -148,6 +149,7 @@ function construirLayout(usuario) {
     <a class="nav-link" href="#" data-vista="comunicados"><i class="bi bi-megaphone"></i> Comunicados</a>
     <a class="nav-link" href="#" data-vista="calendario"><i class="bi bi-calendar-event"></i> Calendario Escolar</a>
     ${usuario.rol === 'docente' ? '<a class="nav-link" href="#" data-vista="reservas"><i class="bi bi-door-open"></i> Reserva de Aulas</a>' : ''}
+    ${usuario.rol === 'docente' ? '<a class="nav-link" href="#" data-vista="usuarios"><i class="bi bi-people"></i> Usuarios</a>' : ''}
   `;
 
   const itemsMovil = (MENU[usuario.rol] || []).map((m) =>

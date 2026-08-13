@@ -72,7 +72,17 @@ function vistaCalificacionesDocente() {
         && c.materiaId === Number(input.dataset.materia)
         && c.periodoId === Number(input.dataset.periodo));
       const valor = input.value === "" ? null : Number(input.value);
-      if (registro) registro.nota = valor;
+      if (registro) {
+        registro.nota = valor;
+      } else if (valor !== null) {
+        DB.calificaciones.push({
+          id: nextId(DB.calificaciones),
+          estudianteId: Number(input.dataset.estudiante),
+          materiaId: Number(input.dataset.materia),
+          periodoId: Number(input.dataset.periodo),
+          nota: valor
+        });
+      }
     });
     guardarDatos();
     notificar("Notas guardadas correctamente.");

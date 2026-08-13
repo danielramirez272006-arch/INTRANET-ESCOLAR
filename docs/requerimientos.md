@@ -1,7 +1,7 @@
 # Requerimientos — Intranet Escolar
 
 > Documento de requerimientos del proyecto **Intranet Escolar**.
-> Versión: 0.2.0 · Estado: en desarrollo (prototipo funcional frontend) · Última actualización: 2026-08-12
+> Versión: 0.4.1 · Estado: en desarrollo (prototipo funcional frontend) · Última actualización: 2026-08-12
 
 ## 1. Descripción general
 
@@ -119,7 +119,10 @@ Un entregable se considera **aceptado** cuando:
   - Calendario de actividades y exámenes con filtro por tipo.
   - Materiales y tareas con descarga simulada y entrega de tareas en línea.
   - Horarios semanales por curso.
+  - Gestión local de usuarios para docentes: alta, edición, activación/desactivación y cambio de contraseña.
 - Datos de ejemplo **ficticios** en `frontend/js/datos.js`; las ediciones se guardan en `localStorage` y pueden restablecerse desde el menú.
+- Cada cuenta demo utiliza una contraseña propia. Las contraseñas se verifican mediante hash SHA-256 con sal únicamente para fines de demostración.
+- La versión local de datos migra automáticamente las entregas de tareas para asociarlas al estudiante, permitiendo que el perfil de familia consulte el estado correcto.
 
 **Limitaciones conocidas (se resolverán con el backend):**
 
@@ -147,3 +150,4 @@ Un entregable se considera **aceptado** cuando:
 | 2026-08-12  | 0.2.0   | Nuevos roles (personal_administrativo, estudiante, familia), módulos de reservas, calendario y materiales/tareas; sección de prototipo frontend. |
 | 2026-08-12  | 0.3.0   | El prototipo se limita a docente, estudiante y familia; se documentan sus permisos y el acceso con contraseña demo. |
 | 2026-08-12  | 0.4.0   | Rediseño visual institucional (escudo escolar, badges por rol, hero banner y paleta académica); suite de pruebas unitarias de criptografía. |
+| 2026-08-12  | 0.4.1   | Notas nuevas persistentes, entregas visibles para familia, gestión de usuarios integrada y credenciales demo individuales. |

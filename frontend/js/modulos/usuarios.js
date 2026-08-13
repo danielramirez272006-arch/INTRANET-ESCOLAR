@@ -203,10 +203,16 @@ function renderUsuarios() {
   $$("#vista-usuarios .btn-password").forEach((btn) => btn.addEventListener("click", () => {
     const usuario = DB.usuarios.find((u) => u.id === Number(btn.dataset.id));
     if (!usuario) return;
+    const contrasena = prompt(`Nueva contraseña para ${usuario.nombre}:`);
+    if (contrasena === null) return;
+    if (contrasena.length < 6) {
+      notificar("La contraseña debe tener al menos 6 caracteres.", "warning");
+      return;
+    }
     usuario.sal = generarSal();
-    usuario.contrasenaHash = hashContrasena("demo2026", usuario.sal);
+    usuario.contrasenaHash = hashContrasena(contrasena, usuario.sal);
     guardarDatos();
     renderUsuarios();
-    notificar(`Contraseña de ${btn.dataset.nombre} restablecida a «demo2026».`);
+    notificar(`Contraseña de ${btn.dataset.nombre} actualizada.`);
   }));
 }

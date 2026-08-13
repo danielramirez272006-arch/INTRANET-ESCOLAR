@@ -1,11 +1,11 @@
-const VERSION_DATOS = 5;
+const VERSION_DATOS = 6;
 const CLAVE_DATOS = "intranet_datos";
-const CORREOS_CUENTAS_DEMO = new Set([
-  "docente@intranet.edu",
-  "pablo.ortega@intranet.edu",
-  "estudiante@intranet.edu",
-  "familia@intranet.edu"
-]);
+const CREDENCIALES_DEMO = {
+  "docente@intranet.edu": { sal: "sal-docente-1-demo", hash: "9cfa9e87b27445924fa3253c87048329f6717092711c62f4c6b1166217c0096e" },
+  "estudiante@intranet.edu": { sal: "sal-estudiante-1-demo", hash: "bbf41b88230c592b0dce0e94f674450a6411e06ede0604db5b6ceaf75cd86aa4" },
+  "familia@intranet.edu": { sal: "sal-familia-1-demo", hash: "99f5f337c9daff490c318158484d1d3d1754d81800f51fdfde4c0ee434fe76b4" },
+  "pablo.ortega@intranet.edu": { sal: "sal-docente-2-demo", hash: "6ca6cbc341d5e7e013c1dcb93f931148781b6b2c525c51e6d2ebb99e08ef4ecb" }
+};
 
 let DB = null;
 
@@ -46,11 +46,19 @@ function migrarDatos() {
       usuario.contrasenaHash = hashContrasena(usuario.contrasena, usuario.sal);
       delete usuario.contrasena;
     }
-    if (CORREOS_CUENTAS_DEMO.has(usuario.email)) {
-      usuario.sal = usuario.sal || generarSal();
-      usuario.contrasenaHash = hashContrasena("demo2026", usuario.sal);
+    const credencialDemo = CREDENCIALES_DEMO[usuario.email];
+    if (credencialDemo) {
+      usuario.sal = credencialDemo.sal;
+      usuario.contrasenaHash = credencialDemo.hash;
     }
   });
+  const entregasMigradas = {};
+  Object.entries(DB.entregas).forEach(([clave, entregada]) => {
+    const [email, materialId] = clave.split(":");
+    const usuario = DB.usuarios.find((u) => u.email === email && u.estudianteId);
+    if (usuario && entregada) entregasMigradas[`${usuario.estudianteId}:${materialId}`] = true;
+  });
+  DB.entregas = entregasMigradas;
   guardarDatos();
 }
 
@@ -82,10 +90,10 @@ function textoFecha(fecha) {
 
 const base = {
   usuarios: [
-    { id: 2, nombre: "Carlos Ríos", rol: "docente", email: "docente@intranet.edu", sal: "sal-docente-1-demo", contrasenaHash: "d20ba135a3b84033d226f3798ec3699a5e4d6d630b5e58ec70cf088b715f93dd", activo: true, cursoId: 3, materiaId: 1 },
-    { id: 4, nombre: "Ana Torres", rol: "estudiante", email: "estudiante@intranet.edu", sal: "sal-estudiante-1-demo", contrasenaHash: "652ef775e4f952f42748c04b90d3b96acf23a9a8036ae8fb7a605ebe62d92800", activo: true, estudianteId: 1 },
-    { id: 5, nombre: "Raquel Torres", rol: "familia", email: "familia@intranet.edu", sal: "sal-familia-1-demo", contrasenaHash: "b118d1e7810d187c697488331a804eebccfb97541be731143886d856f2c3d7bb", activo: true, estudianteId: 1 },
-    { id: 6, nombre: "Pablo Ortega", rol: "docente", email: "pablo.ortega@intranet.edu", sal: "sal-docente-2-demo", contrasenaHash: "e85ef9d7fa3e5646bbcc11438480f47c40604c1da54bf18f84ce3d5fe988b7aa", activo: true, cursoId: 3, materiaId: 2 }
+    { id: 2, nombre: "Carlos Ríos", rol: "docente", email: "docente@intranet.edu", sal: "sal-docente-1-demo", contrasenaHash: "9cfa9e87b27445924fa3253c87048329f6717092711c62f4c6b1166217c0096e", activo: true, cursoId: 3, materiaId: 1 },
+    { id: 4, nombre: "Ana Torres", rol: "estudiante", email: "estudiante@intranet.edu", sal: "sal-estudiante-1-demo", contrasenaHash: "bbf41b88230c592b0dce0e94f674450a6411e06ede0604db5b6ceaf75cd86aa4", activo: true, estudianteId: 1 },
+    { id: 5, nombre: "Raquel Torres", rol: "familia", email: "familia@intranet.edu", sal: "sal-familia-1-demo", contrasenaHash: "99f5f337c9daff490c318158484d1d3d1754d81800f51fdfde4c0ee434fe76b4", activo: true, estudianteId: 1 },
+    { id: 6, nombre: "Pablo Ortega", rol: "docente", email: "pablo.ortega@intranet.edu", sal: "sal-docente-2-demo", contrasenaHash: "6ca6cbc341d5e7e013c1dcb93f931148781b6b2c525c51e6d2ebb99e08ef4ecb", activo: true, cursoId: 3, materiaId: 2 }
   ],
   cursos: [
     { id: 1, nombre: "1° A" },

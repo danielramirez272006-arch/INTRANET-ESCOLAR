@@ -62,9 +62,9 @@ Guía para colaborar en este proyecto. Léela antes de realizar cualquier cambio
 
 - **Toda funcionalidad nueva debe ir acompañada de pruebas.**
 - Ejecuta la suite completa antes de abrir la PR:
-  - Frontend: `npm test` (en la raíz del paquete correspondiente).
-  - Backend: `npm test` (en el paquete correspondiente).
-  - Lint: `npm run lint` (o el script definido en el paquete).
+  - Prototipo actual: `node --test tests/crypto.test.js`.
+  - Cuando existan los paquetes de frontend o backend: `npm test` en el directorio correspondiente.
+  - Lint: `npm run lint` (cuando el script esté definido).
 - No romper el estado verde de `main`.
 - Las pruebas no deben depender de datos reales de estudiantes; usar fixtures ficticios.
 

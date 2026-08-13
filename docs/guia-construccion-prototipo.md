@@ -44,12 +44,12 @@ frontend/
 ### 4.1 Estilos y páginas base
 
 1. Se creó `css/styles.css` (variables, sidebar fija, tarjetas, avatar) sobre Bootstrap 5.
-2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración y formulario; todas las cuentas usan `demo2026` y no hay acceso rápido por rol.
+2. `index.html`: tarjeta de login centrada con selector de cuenta de demostración y formulario; cada cuenta tiene una contraseña distinta y no hay acceso rápido por rol.
 3. `dashboard.html`: navbar superior, sidebar para escritorio, offcanvas para móvil y un contenedor `#vista-<modulo>` por módulo.
 
 ### 4.2 Datos de prueba (js/datos.js)
 
-- Usuarios demo (uno por rol), cursos, materias, periodos y estudiantes **ficticios**.
+- Cuatro usuarios demo (dos docentes, una estudiante y una familiar), cursos, materias, periodos y estudiantes **ficticios**.
 - Calificaciones, asistencia y horarios se **generan de forma determinista** (fórmulas sobre los ids) para que sean estables entre cargas y verificables.
 - Comunicados, recursos, reservas, calendario y materiales se definen manualmente con contenido de ejemplo.
 
@@ -58,7 +58,7 @@ frontend/
 - `iniciarSesion`/`cerrarSesion` guardan/limpian la sesión en `localStorage`.
 - `usuarioActual()` resuelve el usuario activo desde los datos cargados y rechaza cuentas desactivadas.
 - `ROLES` define etiqueta e icono de cada perfil.
-- Las contraseñas se guardan como hash SHA-256 con sal (`js/crypto.js`); el formulario de acceso verifica el hash y no muestra las contraseñas en claro.
+- Las contraseñas se guardan como hash SHA-256 con sal (`js/crypto.js`); cada cuenta demo usa una clave distinta, documentada en `README.md`. El formulario verifica el hash y no muestra las contraseñas en claro.
 
 ### 4.4 Aplicación (js/app.js)
 
@@ -76,6 +76,9 @@ Cada módulo renderiza su vista y ata eventos:
 - `comunicados.js` — publicar, editar y retirar los comunicados propios del docente.
 - `reservas.js` — reserva de recursos con detección de conflictos de horario.
 - `consultas.js` — calendario (filtro por tipo), materiales/tareas (descarga y entrega simulada) y horarios por curso.
+- `usuarios.js` — gestión local de usuarios por el docente: alta, edición, activación/desactivación y cambio de contraseña.
+
+Las calificaciones nuevas se crean al guardarse y las entregas se indexan por estudiante y tarea, de modo que la familia puede consultar el mismo estado que el estudiante vinculado. La migración de `datos.js` conserva esos datos al actualizar una instalación existente.
 
 ## 5. Cómo se verificó
 

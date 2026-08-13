@@ -51,10 +51,11 @@ Plataforma web para la gestión académica y comunicativa de una institución ed
 Incluye:
 
 - Página de inicio de sesión con **cuentas de demostración por rol**.
-- Menú lateral adaptado al rol con los módulos: Inicio, Calificaciones, Asistencia, Comunicados, Reservas, Calendario, Materiales y Tareas, y Horarios.
+- Menú lateral adaptado al rol con los módulos: Inicio, Calificaciones, Asistencia, Comunicados, Reservas, Calendario, Materiales y Tareas, Horarios y gestión de usuarios para docentes.
 - Datos de ejemplo **ficticios** (nunca datos reales de menores) que pueden restablecerse desde el menú.
-- Las ediciones (notas, asistencia, comunicados, reservas, materiales y tareas) se guardan en el navegador.
-- Todas las cuentas demo usan la contraseña `demo2026`; el acceso se realiza únicamente con cuenta y contraseña.
+- Las ediciones (notas, asistencia, comunicados, reservas, materiales, tareas y usuarios) se guardan en el navegador.
+- Al actualizar desde una versión previa, los datos locales se migran automáticamente para conservar las entregas de tareas y actualizar las credenciales demo.
+- Cada cuenta demo usa una contraseña distinta; el acceso se realiza únicamente con cuenta y contraseña.
 
 ## Requisitos previos
 
@@ -78,7 +79,7 @@ Luego entra en `http://localhost:8080`.
 ## Uso
 
 1. Abre la página de inicio (`index.html`).
-2. Selecciona una cuenta de demostración e ingresa la contraseña `demo2026`.
+2. Selecciona una cuenta de demostración e ingresa su contraseña.
 3. Explora los módulos según el rol:
 
 | Cuenta | Rol | Puede hacer |
@@ -86,6 +87,14 @@ Luego entra en `http://localhost:8080`.
 | Carlos Ríos | Docente | Registrar calificaciones y asistencia, publicar materiales y comunicados, reservar recursos |
 | Ana Torres | Estudiante | Consultar notas, horario y asistencia; entregar tareas |
 | Raquel Torres | Familia | Seguimiento académico de su estudiante |
+| Pablo Ortega | Docente | Registrar calificaciones y asistencia, publicar materiales y comunicados, reservar recursos |
+
+| Cuenta | Contraseña demo |
+|---|---|
+| Carlos Ríos | `Docente2026!` |
+| Ana Torres | `Estudiante2026!` |
+| Raquel Torres | `Familia2026!` |
+| Pablo Ortega | `Pablo2026!` |
 
 ## Pruebas unitarias
 
